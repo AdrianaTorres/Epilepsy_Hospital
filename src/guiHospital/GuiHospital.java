@@ -40,41 +40,53 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class GuiHospital extends JFrame {
+public class GuiHospital extends JFrame implements Runnable{
 	private static JList list;
 	private JPanel contentPane;
 	private JTextField tag;
 	private static List<String> users;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					String[] names= new String[100];
-					for (int i = 0; i < names.length; i++) {
-						names[i]=i+" name";
-					}
-					List<String> users= new ArrayList<String>();
-					for (int i = 0; i < names.length; i++) {
-						users.add(names[i]);
-					}
-					GuiHospital frame = new GuiHospital(users);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	/**
 	 * Create the frame.
 	 */
 	public GuiHospital(List<String>activePatients) {
 		this.users=activePatients;
+	}
+
+	private static String[] filterList(String name) {
+		List <String> matches=new ArrayList<String>();
+		int counter=0;
+		for (Iterator iterator = users.iterator(); iterator.hasNext();) {
+			String string = (String) iterator.next();
+			if(string.contains(name)) {
+				matches.add(string);
+				counter++;
+			}
+		} 
+		String[]match=new String[counter];
+		counter=0;
+		for (Iterator iterator = matches.iterator(); iterator.hasNext();) {
+			String string = (String) iterator.next();
+			match[counter]=string;
+			counter++;
+		}
+		return (match);
+	}
+	private static void updateList(String[]filteredList) {
+		DefaultListModel<String> lm= new DefaultListModel<String>();
+		for (int i = 0; i < filteredList.length; i++) {
+			lm.addElement(filteredList[i]);
+		}
+		list.removeAll();
+		list.setModel(lm);
+		list.setVisible(false);
+		list.setVisible(true);
+	}
+	public static void updateClients(List<String> clients) {
+		users=clients;
+	}
+
+	@Override
+	public void run() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -133,7 +145,7 @@ public class GuiHospital extends JFrame {
 		contentPane.add(new JScrollPane(list), BorderLayout.CENTER);
 
 		DefaultListModel<String> listModel =new DefaultListModel<String>();
-		for (Iterator<String> iterator = activePatients.iterator(); iterator.hasNext();) {
+		for (Iterator<String> iterator = this.users.iterator(); iterator.hasNext();) {
 			String string = (String) iterator.next();
 			listModel.addElement(string);
 		}
@@ -285,38 +297,6 @@ public class GuiHospital extends JFrame {
 		gbc_horizontalStrut_2.gridy = 3;
 		panel_5.add(horizontalStrut_2, gbc_horizontalStrut_2);
 
-	}
 
-	private static String[] filterList(String name) {
-		List <String> matches=new ArrayList<String>();
-		int counter=0;
-		for (Iterator iterator = users.iterator(); iterator.hasNext();) {
-			String string = (String) iterator.next();
-			if(string.contains(name)) {
-				matches.add(string);
-				counter++;
-			}
-		} 
-		String[]match=new String[counter];
-		counter=0;
-		for (Iterator iterator = matches.iterator(); iterator.hasNext();) {
-			String string = (String) iterator.next();
-			match[counter]=string;
-			counter++;
-		}
-		return (match);
-	}
-	private static void updateList(String[]filteredList) {
-		DefaultListModel<String> lm= new DefaultListModel<String>();
-		for (int i = 0; i < filteredList.length; i++) {
-			lm.addElement(filteredList[i]);
-		}
-		list.removeAll();
-		list.setModel(lm);
-		list.setVisible(false);
-		list.setVisible(true);
-	}
-	public static void updateClients(List<String> clients) {
-		users=clients;
 	}
 }
