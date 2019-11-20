@@ -8,11 +8,12 @@ import java.util.logging.Logger;
 
 import connectionManager.HospitalConnection;
 import connectionManager.Server;
+import guiHospital.GuiHospital;
 
 public class MainHospital {
 	
 	public static void main(String[] args) throws Exception {
-		//Thread interfaz
+	new Thread(new GuiHospital(null)).start();
 	new Thread(new Server()).start();
 	}
 	}
