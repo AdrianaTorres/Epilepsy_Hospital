@@ -1,7 +1,10 @@
 package connectionManager;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -10,37 +13,31 @@ import java.util.logging.Logger;
 
 public class HospitalConnection implements Runnable {
 
-	int byteRead;
     Socket socket;
-
-    public HospitalConnection(Socket socket) {
-        this.socket = socket;
-    }
+	PrintWriter pw;
+	BufferedReader bf;
+	Thread t;
+	Boolean requestedMonitoring;
+	
+	public HospitalConnection (Socket socket) throws Exception{
+		try {
+			this.socket = socket;
+			pw = new PrintWriter(socket.getOutputStream(),true);
+			bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			requestedMonitoring=false;
+		} catch (Exception e) {
+			System.out.println("could not connect to server!");
+			socket = null;
+			pw = null;
+			bf = null;
+			e.printStackTrace();
+			throw new Exception();
+		} 
+	}
 
     @Override
     public void run() {
-        boolean connected = true;
-
-        try {
-            //Read from the client
-            InputStream inputStream = socket.getInputStream();
-
-            while (connected == true) {
-                byteRead = inputStream.read();
-                //We read until is finished the connection or character 'x'
-                if (byteRead == -1 || byteRead == 'x') {
-                    System.out.println("Character reception finished");
-                    releaseResources(inputStream, socket);
-                    connected = false;
-                    //System.exit(0);
-                }
-                char caracter = (char) byteRead;
-                System.out.print(caracter);
-                System.out.print(" ");
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
 
     }
 
@@ -58,6 +55,18 @@ public class HospitalConnection implements Runnable {
             Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+   
+    public void answerLogin () {
+    	String userName;
+    	String password;
+    	try {
+			userName = bf.readLine();
+			password = bf.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	//confirmar user y contraseña.
     }
 
 }
