@@ -14,12 +14,12 @@ import java.util.Iterator;
 import java.util.List;
 
 public class FileManager {
-	private String userpasswdPath=System.getProperty("user.dir")+"\\whiteList.txt";
-	private String usersData=System.getProperty("user.dir")+"\\clients.txt";
-	private String reportDir=System.getProperty("user.dir")+"\\reports";
+	private static String userpasswdPath=System.getProperty("user.dir")+"\\whiteList.txt";
+	private static String usersData=System.getProperty("user.dir")+"\\clients.txt";
+	private static String reportDir=System.getProperty("user.dir")+"\\reports";
 	
-	private BufferedReader bf;
-	private PrintWriter pw;
+	private static BufferedReader bf;
+	private static PrintWriter pw;
 	
 	FileManager(){
 		if(isConfigured()) {
@@ -28,7 +28,7 @@ public class FileManager {
 			System.out.println("fatal error could not open necessary config files");
 		}
 	}
-	private boolean isConfigured() {
+	private static boolean isConfigured() {
 		File conf= new File(userpasswdPath);
 		File report= new File(reportDir);
 		File usdata =new File(usersData);
@@ -48,7 +48,7 @@ public class FileManager {
 		}
 	}
 	
-	public List[] getUserAndPasswords(){
+	public static List[] getUserAndPasswords(){
 		try {
 			bf= new BufferedReader(new InputStreamReader(new FileInputStream(userpasswdPath)));
 			List <String> userNames= new ArrayList<String>();
@@ -71,7 +71,7 @@ public class FileManager {
 		}
 	}
 	
-	public void setUserAndPassword(String username, String password) {
+	public static void setUserAndPassword(String username, String password) {
 		try {
 			pw = new PrintWriter(new FileOutputStream(userpasswdPath));
 			pw.println(username);
@@ -82,7 +82,7 @@ public class FileManager {
 		}
 	}
 	
-	public void setreport(List[]ecg,List[]eeg,String comments,String userName) {
+	public static void setreport(List[]ecg,List[]eeg,String comments,String userName) {
 		int counter=0;
 		File manager = new File(System.getProperty("user.dir")+"\\reports\\"+userName+"report_"+counter+".txt");
 		while(manager.isFile()) {
@@ -127,7 +127,7 @@ public class FileManager {
 		}
 	}
 	
-	public Report getReport(String report) {
+	public static Report getReport(String report) {
 		List<Double> time1 = new ArrayList <Double>();
 		List<Double> time2 = new ArrayList <Double>();
 		List<Double> ecg = new ArrayList <Double>();
@@ -179,7 +179,7 @@ public class FileManager {
 		}
 	}
 	
-	public User getUserConfig(String userName) {
+	public static User getUserConfig(String userName) {
 		try {
 			bf= new BufferedReader(new InputStreamReader(new FileInputStream(usersData)));
 			User us=null;
@@ -210,7 +210,7 @@ public class FileManager {
 		}
 	}
 	
-	public void setUserConfig(User us) {
+	public static void setUserConfig(User us) {
 		try {
 			pw= new PrintWriter(new FileOutputStream(usersData));
 			pw.println(us.getUserName());
@@ -245,7 +245,7 @@ public class FileManager {
 		return new double[] {time, input};
 	}
 
-	public void close() {
+	public static void close() {
 		try {
 			pw.close();
 		}catch(Exception e) {
