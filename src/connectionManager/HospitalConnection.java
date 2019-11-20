@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,15 +60,43 @@ public class HospitalConnection implements Runnable {
     }
    
     public void answerLogin () {
-    	String userName;
-    	String password;
+    	String userName = null;
+    	String password = null;
     	try {
 			userName = bf.readLine();
 			password = bf.readLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    	//confirmar user y contraseña. 
+    	if (isValidInput(userName)) {
+    		List users = fileManager.FileManager.getUserAndPasswords()[0];
+    		List passwords = fileManager.FileManager.getUserAndPasswords()[1];
+    		
+    		Iterator itu = users.iterator();
+    		Iterator itp = passwords.iterator();
+    		
+    		while (itu.hasNext() & itp.hasNext()) {
+    			if (userName == itu.next() & password == itp.next()) {
+    				pw.write(userName);
+    				pw.write(password);
+    			}
+    		}
+    		
+    	} 
+    }
+    
+    public void answerNewProfile () {
+    	String userName = null;
+    	String password = null;
+    	try {
+			userName = bf.readLine();
+			password = bf.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	if (isValidInput(userName)) {
+    		fileManager.FileManager.setUserAndPassword(userName, password);
+    	}
     }
 
     private boolean isValidInput(String input) {
