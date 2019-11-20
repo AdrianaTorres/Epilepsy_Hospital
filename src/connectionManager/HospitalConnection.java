@@ -66,7 +66,32 @@ public class HospitalConnection implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    	//confirmar user y contraseña.
+    	//confirmar user y contraseña. 
     }
 
+    private boolean isValidInput(String input) {
+    	char[] check=input.toCharArray();
+    	char[] whitelist= {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',' ','0','1','2','3','4','5','6','7','8','9',};
+    	boolean valid=false;
+    	int counter=0;
+    	for (int i = 0; i < check.length; i++) {
+			char temp=check[i];
+			boolean found=false;
+			for (int j = 0; j < whitelist.length; j++) {
+				if(temp==whitelist[j]) {
+					found=true;
+					break;
+				}
+			}
+			if(!found) {
+				break;
+			}else {
+				counter++;
+			}
+		}
+    	if(counter==check.length) {
+    		valid=true;
+    	}
+    	return valid;
+    }
 }
