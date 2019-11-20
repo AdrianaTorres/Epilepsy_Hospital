@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -13,9 +14,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import fileManager.User;
+
 public class HospitalConnection implements Runnable {
 
     Socket socket;
+    InputStream inputStream;
+    OutputStream outputStream; 
 	PrintWriter pw;
 	BufferedReader bf;
 	Thread t;
@@ -43,14 +48,32 @@ public class HospitalConnection implements Runnable {
 
     }
 
-    private static void releaseResources(InputStream inputStream, Socket socket) {
+    private static void releaseResources(InputStream is, OutputStream os, PrintWriter pw, BufferedReader br, Socket socket) {
 
         try {
-            inputStream.close();
+            is.close();
+        } catch (IOException ex) {
+            Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            os.close();
+        } catch (IOException ex) {
+            Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            pw.close();
         } catch (IOException ex) {
             Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        try {
+            br.close();
+        } catch (IOException ex) {
+            Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         try {
             socket.close();
         } catch (IOException ex) {
@@ -97,6 +120,61 @@ public class HospitalConnection implements Runnable {
     	if (isValidInput(userName)) {
     		fileManager.FileManager.setUserAndPassword(userName, password);
     	}
+    }
+    
+    //This can only be requested if login has been done before.
+    public void answerDataProfile () {
+    	String name;
+    	String surname;
+    	float weight;
+    	int age;
+    	char gender;
+    	
+    	try {
+    		
+			name = bf.readLine();
+			surname = bf.readLine();
+			weight = inputStream.read();
+			age = inputStream.read();
+			//gender = bf.readLine(); --> como se leen los char?
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	//User user = new User (name, surname, weight, age, gender, userName);
+    	//fileManager.FileManager.setUserConfig(user);
+    }
+    
+    public void answerMonitoring () {
+    	/*List <Double>*/ String ecg;
+    	/*List <Double>*/ String eeg; 
+    	boolean connected = true;
+    	
+    	while (connected == true) {
+    		try {
+				ecg = bf.readLine();
+				
+				if (bf.readLine() == "x") {
+                System.out.println("Character reception finished");
+                connected = false;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		
+    		
+    	}
+    }
+    
+    public void answerAlert () { //¿Metemos algo más aquí?
+    	System.out.println("Sending an ambulance."); 
+    }
+    
+    public void answerFinishSession () {
+    	releaseResources (inputStream, outputStream, pw, bf, socket);
+    	System.out.println ("Session finished.");
     }
 
     private boolean isValidInput(String input) {
