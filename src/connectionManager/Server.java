@@ -22,7 +22,12 @@ public class Server implements Runnable {
                 //This executes when we have a client
                 Socket socket = serverSocket.accept();
                 boolean connected = true;
-                new Thread(new HospitalConnection(socket)).start();
+                try {
+                	new Thread(new HospitalConnection(socket)).start();
+                }catch(Exception e) {
+                	System.out.println("could not connet patient");
+                }
+                
             }
         } catch (IOException e) {
 			e.printStackTrace();
