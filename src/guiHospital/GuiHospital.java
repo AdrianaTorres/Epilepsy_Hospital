@@ -297,6 +297,6 @@ public class GuiHospital extends JFrame implements Runnable{
 		gbc_horizontalStrut_2.gridy = 3;
 		panel_5.add(horizontalStrut_2, gbc_horizontalStrut_2);
 
-
+		super.setVisible(true);
 	}
 }
