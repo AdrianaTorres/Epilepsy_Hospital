@@ -64,7 +64,7 @@ public class HospitalConnection implements Runnable {
         
         try {
             pw.close();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -97,14 +97,18 @@ public class HospitalConnection implements Runnable {
     		
     		Iterator itu = users.iterator();
     		Iterator itp = passwords.iterator();
-    		
+    		boolean confirmed=false;
     		while (itu.hasNext() & itp.hasNext()) {
     			if (userName == itu.next() & password == itp.next()) {
-    				pw.write(userName);
-    				pw.write(password);
+    				confirmed=true;
+    				break;
     			}
     		}
-    		
+    		if(confirmed) {
+    			pw.println("ACCEPTED");
+    		}else {
+    			pw.println("REJECTED");
+    		}
     	} 
     }
     
@@ -114,12 +118,12 @@ public class HospitalConnection implements Runnable {
     	try {
 			userName = bf.readLine();
 			password = bf.readLine();
+			if (isValidInput(userName) && isValidInput(password)) {
+	    		fileManager.FileManager.setUserAndPassword(userName, password);
+	    	}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    	if (isValidInput(userName)) {
-    		fileManager.FileManager.setUserAndPassword(userName, password);
-    	}
     }
     
     //This can only be requested if login has been done before.
