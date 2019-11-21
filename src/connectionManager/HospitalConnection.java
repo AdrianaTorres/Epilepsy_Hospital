@@ -131,34 +131,33 @@ public class HospitalConnection implements Runnable {
     	char gender;
     	
     	try {
-    		
+    		//Comprobar
 			name = bf.readLine();
 			surname = bf.readLine();
 			weight = inputStream.read();
 			age = inputStream.read();
-			//gender = bf.readLine(); --> como se leen los char?
+			gender = bf.readLine().toCharArray()[0];
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
     	
-    	//User user = new User (name, surname, weight, age, gender, userName);
+    	//User user = new User (name, surname, weight, age, gender, userName --> variable local);
     	//fileManager.FileManager.setUserConfig(user);
     }
     
     public void answerMonitoring () {
-    	/*List <Double>*/ String ecg;
-    	/*List <Double>*/ String eeg; 
-    	boolean connected = true;
+    	List <Double> ecg;
+    	List <Double> eeg;
+    	List <Double> timeEEG;
+    	List <Double> timeECG;
     	
-    	while (connected == true) {
+    	while (true) {
     		try {
-				ecg = bf.readLine();
-				
-				if (bf.readLine() == "x") {
-                System.out.println("Character reception finished");
-                connected = false;
-				}
+    			//Dos for 
+				timeEEG = Double.parseDouble(bf.readLine());
+				eeg = bf.readLine()
+								
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -175,6 +174,7 @@ public class HospitalConnection implements Runnable {
     public void answerFinishSession () {
     	releaseResources (inputStream, outputStream, pw, bf, socket);
     	System.out.println ("Session finished.");
+    	boolean connection = false;
     }
 
     private boolean isValidInput(String input) {
