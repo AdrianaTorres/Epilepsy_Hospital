@@ -26,6 +26,10 @@ public class HospitalConnection implements Runnable {
 	Thread t;
 	Boolean requestedMonitoring;
 	
+	User currentUser = new User (" ", " ", 0, 0, ' ', " ");
+	String currentUserName;
+	String currentPassword;
+	
 	public HospitalConnection (Socket socket) throws Exception{
 		try {
 			this.socket = socket;
@@ -44,8 +48,84 @@ public class HospitalConnection implements Runnable {
 
     @Override
     public void run() {
+        String request = null;
         
-
+        try {
+			request = bf.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        switch (request) {
+        	case "USER REQUESTING LOGIN": 
+        		answerLogin();
+        		boolean connected = true;
+        		String request2 = null;
+        		try {
+        			request2 = bf.readLine();
+        		} catch (IOException e) {
+        			// TODO Auto-generated catch block
+        			e.printStackTrace();
+        		}
+        		while (connected) { 
+        			switch (request2) {
+        				case "USER REQUESTING MONITORING":
+        					answerMonitoring();
+        					break;
+        				case "USER REQUESTING NEW REPORT":
+        					answerNewRwport();
+        					break;
+        				case "USER REQUESTING ASSISTANCE":
+        					answerAlert();
+        					break;
+        				case "FINISHED MONITORING":
+        					answerFinishSession();
+        					connected = false;
+        					break;        				
+        			}
+        			}
+        	
+        	case "USER REQUESTING NEW PROFILE": 
+        		answerNewProfile();
+        		boolean connected2 = true;
+        		pw.println("Please finish creating the profile by filling your personal data.");
+        		String request3 = null;
+        		try {
+        			request3 = bf.readLine();
+        		} catch (IOException e) {
+        			// TODO Auto-generated catch block
+        			e.printStackTrace();
+        		}
+        		if (request3 == "USER REQUESTING NEW USER PROFILE") {
+        			answerProfileData();
+        			String request4 = null;
+        			while (connected2) { 
+            			switch (request4) {
+            				case "USER REQUESTING MONITORING":
+            					answerMonitoring();
+            					break;
+            				case "USER REQUESTING NEW REPORT":
+            					answerNewRwport();
+            					break;
+            				case "USER REQUESTING ASSISTANCE":
+            					answerAlert();
+            					break;
+            				case "FINISHED MONITORING":
+            					answerFinishSession();
+            					connected = false;
+            					break;        				
+            			}
+        			}	
+        		}
+        		else pw.println("Please fill your personal data to be able to use our services.");
+        		
+        	default: 
+        		pw.println("Please login or create a new profile to be able to use our services.");
+        		break;
+        
+        	}
+        
     }
 
     private static void releaseResources(InputStream is, OutputStream os, PrintWriter pw, BufferedReader br, Socket socket) {
@@ -106,6 +186,8 @@ public class HospitalConnection implements Runnable {
     		}
     		if(confirmed) {
     			pw.println("ACCEPTED");
+    			currentUserName = userName;
+    			currentPassword = password;
     		}else {
     			pw.println("REJECTED");
     		}
@@ -120,6 +202,8 @@ public class HospitalConnection implements Runnable {
 			password = bf.readLine();
 			if (isValidInput(userName) && isValidInput(password)) {
 	    		fileManager.FileManager.setUserAndPassword(userName, password);
+	    		currentUserName = userName;
+	    		currentPassword = password;
 	    	}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -127,27 +211,49 @@ public class HospitalConnection implements Runnable {
     }
     
     //This can only be requested if login has been done before.
-    public void answerDataProfile () {
-    	String name;
-    	String surname;
-    	float weight;
-    	int age;
-    	char gender;
+    public void answerProfileData () {
+    	String name = null;
+    	String surname = null;
+    	String weightS = null;
+    	String ageS = null;
+    	String genderS = null;
+    	int weight = 0;
+    	int age = 0;
+    	char gender = ' '; 
     	
     	try {
-    		//Comprobar
 			name = bf.readLine();
 			surname = bf.readLine();
-			weight = inputStream.read();
-			age = inputStream.read();
-			gender = bf.readLine().toCharArray()[0];
+			weightS = bf.readLine();
+			ageS = bf.readLine();
+			genderS = bf.readLine();
+			
+			if (isValidInput(name)) {
+				currentUser.setName(name);
+			}
+			if (isValidInput(surname)) {
+				currentUser.setSurname(surname);
+			}
+			if (isValidInput(weightS)) {
+				weight = Integer.parseInt(weightS);
+				currentUser.setWeight(weight);
+			}
+			if (isValidInput(ageS)) {
+				age = Integer.parseInt(ageS);
+				currentUser.setAge(age);
+			}
+			if (isValidInput(genderS)) {
+				gender = genderS.toCharArray()[0];
+				currentUser.setGender(gender);
+			}
+			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
     	
-    	//User user = new User (name, surname, weight, age, gender, userName --> variable local);
-    	//fileManager.FileManager.setUserConfig(user);
+    	User user = new User (name, surname, weight, age, gender, currentUserName);
+    	fileManager.FileManager.setUserConfig(user);
     }
     
     public void answerMonitoring () {
@@ -169,6 +275,10 @@ public class HospitalConnection implements Runnable {
     		
     		
     	}
+    }
+    
+    public void answerNewRwport () {
+    	
     }
     
     public void answerAlert () { //¿Metemos algo más aquí?

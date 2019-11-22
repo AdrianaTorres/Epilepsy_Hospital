@@ -21,7 +21,6 @@ public class Server implements Runnable {
             while (true) {
                 //This executes when we have a client
                 Socket socket = serverSocket.accept();
-                boolean connected = true;
                 try {
                 	new Thread(new HospitalConnection(socket)).start();
                 }catch(Exception e) {
