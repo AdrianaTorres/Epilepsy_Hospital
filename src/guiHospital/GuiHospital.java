@@ -81,8 +81,11 @@ public class GuiHospital extends JFrame implements Runnable{
 		list.setVisible(false);
 		list.setVisible(true);
 	}
-	public static void updateClients(List<String> clients) {
-		users=clients;
+	public static void updateClients(String clients) {
+		users.add(clients);
+	}
+	public static void removeClients(String clients) {
+		users.remove(clients);
 	}
 
 	@Override

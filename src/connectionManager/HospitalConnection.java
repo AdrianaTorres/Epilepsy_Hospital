@@ -9,12 +9,15 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import fileManager.FileManager;
 import fileManager.User;
+import guiHospital.GuiHospital;
 
 public class HospitalConnection implements Runnable {
 
@@ -179,7 +182,7 @@ public class HospitalConnection implements Runnable {
     		Iterator itp = passwords.iterator();
     		boolean confirmed=false;
     		while (itu.hasNext() & itp.hasNext()) {
-    			if (userName == itu.next() & password == itp.next()) {
+    			if (userName.equals(itu.next()) && password.equals(itp.next())) {
     				confirmed=true;
     				break;
     			}
@@ -201,12 +204,32 @@ public class HospitalConnection implements Runnable {
 			userName = bf.readLine();
 			password = bf.readLine();
 			if (isValidInput(userName) && isValidInput(password)) {
-	    		fileManager.FileManager.setUserAndPassword(userName, password);
-	    		currentUserName = userName;
-	    		currentPassword = password;
+				List<String> users = FileManager.getUserAndPasswords()[0];
+				boolean profileExists=false;
+				for (Iterator iterator = users.iterator(); iterator.hasNext();) {
+					String string = (String) iterator.next();
+					if(string.equals(userName)) {
+						profileExists=true;
+						break;
+					}
+				}
+				if(profileExists) {
+					pw.println("DENIED");
+				}else {
+					fileManager.FileManager.setUserAndPassword(userName, password);
+		    		currentUserName = userName;
+		    		currentPassword = password;
+		    		/*I really dunno if the application was built to create the profile and login at the same time...
+		    		 * Gotta check if this works with the client, I'll have a thorough look tomorrow CONNECTIONMANAGER
+		    		 * epilepsy patient*/
+		    		pw.println("CONFIRM");
+				}
+	    	}else {
+	    		pw.println("DENIED");
 	    	}
 		} catch (IOException e) {
 			e.printStackTrace();
+			pw.println("DENIED");
 		}
     }
     
@@ -219,7 +242,8 @@ public class HospitalConnection implements Runnable {
     	String genderS = null;
     	int weight = 0;
     	int age = 0;
-    	char gender = ' '; 
+    	char gender = ' ';
+    	boolean rejected=false;
     	
     	try {
 			name = bf.readLine();
@@ -230,50 +254,95 @@ public class HospitalConnection implements Runnable {
 			
 			if (isValidInput(name)) {
 				currentUser.setName(name);
+			}else {
+				rejected=true;
 			}
 			if (isValidInput(surname)) {
 				currentUser.setSurname(surname);
+			}else {
+				rejected=true;
 			}
 			if (isValidInput(weightS)) {
 				weight = Integer.parseInt(weightS);
 				currentUser.setWeight(weight);
+			}else {
+				rejected=true;
 			}
 			if (isValidInput(ageS)) {
 				age = Integer.parseInt(ageS);
 				currentUser.setAge(age);
+			}else {
+				rejected=true;
 			}
 			if (isValidInput(genderS)) {
 				gender = genderS.toCharArray()[0];
 				currentUser.setGender(gender);
+			}else {
+				rejected=true;
 			}
-			
-			
+			if(!rejected) {
+		    	User user = new User (name, surname, weight, age, gender, currentUserName);
+		    	fileManager.FileManager.setUserConfig(user);
+		    	pw.println("ACCEPTED");
+			}else {
+				pw.println("REJECTED");
+			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
+			pw.println("REJECTED");
 		}
     	
-    	User user = new User (name, surname, weight, age, gender, currentUserName);
-    	fileManager.FileManager.setUserConfig(user);
+
     }
     
     public void answerMonitoring () {
-    	List <Double> ecg;
-    	List <Double> eeg;
-    	List <Double> timeEEG;
-    	List <Double> timeECG;
-    	
+    	List <Double> ecg= new ArrayList<Double>();
+    	List <Double> eeg=new ArrayList<Double>();
+    	List <Double> timeEEG=new ArrayList<Double>();
+    	List <Double> timeECG=new ArrayList<Double>();
+    	boolean phase1=false;
+    	int counter=0;
     	while (true) {
     		try {
-    			//Dos for 
-				timeEEG = Double.parseDouble(bf.readLine());
-				eeg = bf.readLine()
-								
+    			String read=bf.readLine();
+    			if(read.contains("ECG")) {
+    				phase1=true;
+    				counter=0;
+    			}
+    			if(read.contains("EEG")) {
+    				phase1=false;
+    				counter=0;
+    			}
+    			if(read.equals("FINISHED MONITORING")) {
+    				break;
+    			}
+    			try {
+    				Double.parseDouble(read);
+    				if(phase1) {
+        				if(counter%2==0) {
+        					timeECG.add(Double.parseDouble(read));
+        					counter++;
+        				}else {
+        					ecg.add(Double.parseDouble(read));
+        					counter++;
+        				}
+        			}else {
+        				if(counter%2==0) {
+        					timeEEG.add(Double.parseDouble(read));
+        					counter++;
+        				}else {
+        					eeg.add(Double.parseDouble(read));
+        					counter++;
+        				}
+        			}
+    			}catch(Exception e) {
+    				continue;
+    			}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-    		
-    		
     	}
     }
     
@@ -281,8 +350,8 @@ public class HospitalConnection implements Runnable {
     	
     }
     
-    public void answerAlert () { //¿Metemos algo más aquí?
-    	System.out.println("Sending an ambulance."); 
+    public void answerAlert () {
+    	GuiHospital.updateClients(this.currentUserName);
     }
     
     public void answerFinishSession () {
