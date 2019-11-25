@@ -106,6 +106,9 @@ public class HospitalConnection implements Runnable {
         			String request4 = null;
         			while (connected2) { 
             			switch (request4) {
+            				case "USER REQUESTING LOGIN": 
+            					answerLogin();
+            					break;
             				case "USER REQUESTING MONITORING":
             					answerMonitoring();
             					break;
