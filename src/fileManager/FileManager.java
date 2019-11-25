@@ -57,6 +57,9 @@ public class FileManager {
 			java.lang.String read;
 			int counter=0;
 			while((read= bf.readLine())!=null) {
+				if(read.equals("")) {
+					continue;
+				}
 				if(counter%2==0) {
 					userNames.add((String) read);
 				}else {
@@ -213,6 +216,7 @@ public class FileManager {
 	
 	public static void setUserConfig(User us) {
 		try {
+			
 			pw= new PrintWriter(new FileOutputStream(usersData),true);
 			pw.println(us.getUserName());
 			pw.println(us.getName());
