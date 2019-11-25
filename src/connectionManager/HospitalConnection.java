@@ -344,6 +344,51 @@ public class HospitalConnection implements Runnable {
     }
     
     public void answerNewReport () {
+    	List <Double> data = new ArrayList<Double>();
+    	List <Double> time = new ArrayList<Double>();
+    	boolean phase1=false;
+    	int counter=0;
+    	while (true) {
+    		try {
+    			String read=bf.readLine();
+    			if(read.contains("ECG")) {
+    				phase1=true;
+    				counter=0;
+    			}
+    			if(read.contains("EEG")) {
+    				phase1=false;
+    				counter=0;
+    			}
+    			if(read.equals("FINISHED MONITORING")) {
+    				break;
+    			}
+    			try {
+    				Double.parseDouble(read);
+    				if(phase1) {
+        				if(counter%2==0) {
+        					time.add(Double.parseDouble(read));
+        					counter++;
+        				}else {
+        					data.add(Double.parseDouble(read));
+        					counter++;
+        				}
+        			}else {
+        				if(counter%2==0) {
+        					time.add(Double.parseDouble(read));
+        					counter++;
+        				}else {
+        					data.add(Double.parseDouble(read));
+        					counter++;
+        				}
+        			}
+    			}catch(Exception e) {
+    				continue;
+    			}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     	
     }
     
