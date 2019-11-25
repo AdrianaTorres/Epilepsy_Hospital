@@ -74,7 +74,7 @@ public class FileManager {
 	
 	public static void setUserAndPassword(String username, String password) {
 		try {
-			pw = new PrintWriter(new FileOutputStream(userpasswdPath));
+			pw = new PrintWriter(new FileOutputStream(userpasswdPath),true);
 			pw.println(username);
 			pw.println(password);
 		}catch(Exception e) {
@@ -213,7 +213,7 @@ public class FileManager {
 	
 	public static void setUserConfig(User us) {
 		try {
-			pw= new PrintWriter(new FileOutputStream(usersData));
+			pw= new PrintWriter(new FileOutputStream(usersData),true);
 			pw.println(us.getUserName());
 			pw.println(us.getName());
 			pw.println(us.getSurname());

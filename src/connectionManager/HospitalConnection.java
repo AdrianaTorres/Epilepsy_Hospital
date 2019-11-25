@@ -100,7 +100,8 @@ public class HospitalConnection implements Runnable {
         			// TODO Auto-generated catch block
         			e.printStackTrace();
         		}
-        		if (request3 == "USER REQUESTING NEW USER PROFILE") {
+        		if (request3.equals("USER REQUESTING NEW USER PROFILE")) {
+        			System.out.println("i like barbaque sauce on my titties");
         			answerProfileData();
         			String request4 = null;
         			while (connected2) { 
@@ -203,6 +204,7 @@ public class HospitalConnection implements Runnable {
     	try {
 			userName = bf.readLine();
 			password = bf.readLine();
+			System.out.println(userName+"   "+password);
 			if (isValidInput(userName) && isValidInput(password)) {
 				List<String> users = FileManager.getUserAndPasswords()[0];
 				boolean profileExists=false;
@@ -283,9 +285,13 @@ public class HospitalConnection implements Runnable {
 			if(!rejected) {
 		    	User user = new User (name, surname, weight, age, gender, currentUserName);
 		    	fileManager.FileManager.setUserConfig(user);
+		    	FileManager.setUserAndPassword(currentUserName, currentPassword);
 		    	pw.println("ACCEPTED");
+		    	System.out.println("ACCEPTED");
+		    	System.out.println(user);
 			}else {
 				pw.println("REJECTED");
+				System.out.println("REJECTED");
 			}
 
 		} catch (IOException e) {
