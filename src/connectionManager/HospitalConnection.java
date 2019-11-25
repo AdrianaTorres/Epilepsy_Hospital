@@ -62,22 +62,24 @@ public class HospitalConnection implements Runnable {
         
         switch (request) {
         	case "USER REQUESTING LOGIN": 
+        		System.out.println("login");
         		answerLogin();
         		boolean connected = true;
         		String request2 = null;
-        		try {
-        			request2 = bf.readLine();
-        		} catch (IOException e) {
-        			// TODO Auto-generated catch block
-        			e.printStackTrace();
-        		}
-        		while (connected) { 
+        		while (connected) {    			
+        			try {
+						request2=bf.readLine();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+        			System.out.println(request2);
         			switch (request2) {
         				case "USER REQUESTING MONITORING":
         					answerMonitoring();
         					break;
         				case "USER REQUESTING NEW REPORT":
-        					answerNewRwport();
+        					answerNewReport();
         					break;
         				case "USER REQUESTING ASSISTANCE":
         					answerAlert();
@@ -101,30 +103,9 @@ public class HospitalConnection implements Runnable {
         			e.printStackTrace();
         		}
         		if (request3.equals("USER REQUESTING NEW USER PROFILE")) {
-        			System.out.println("i like barbaque sauce on my titties");
         			answerProfileData();
-        			String request4 = null;
-        			while (connected2) { 
-            			switch (request4) {
-            				case "USER REQUESTING LOGIN": 
-            					answerLogin();
-            					break;
-            				case "USER REQUESTING MONITORING":
-            					answerMonitoring();
-            					break;
-            				case "USER REQUESTING NEW REPORT":
-            					answerNewRwport();
-            					break;
-            				case "USER REQUESTING ASSISTANCE":
-            					answerAlert();
-            					break;
-            				case "FINISHED MONITORING":
-            					answerFinishSession();
-            					connected = false;
-            					break;        				
-            			}
-        			}	
-        		}
+        			answerFinishSession();
+        			    		}
         		else pw.println("Please fill your personal data to be able to use our services.");
         		
         	default: 
@@ -195,6 +176,13 @@ public class HospitalConnection implements Runnable {
     			pw.println("ACCEPTED");
     			currentUserName = userName;
     			currentPassword = password;
+    			User user = fileManager.FileManager.getUserConfig(currentUserName);
+    			pw.println(user.getName());
+    			pw.println(user.getSurname());
+    			pw.println(user.getWeight());
+    			pw.println(user.getAge());
+    			pw.println(user.getGender());
+    			
     		}else {
     			pw.println("REJECTED");
     		}
@@ -355,7 +343,7 @@ public class HospitalConnection implements Runnable {
     	}
     }
     
-    public void answerNewRwport () {
+    public void answerNewReport () {
     	
     }
     
