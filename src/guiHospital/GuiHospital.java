@@ -167,7 +167,8 @@ public class GuiHospital extends JFrame implements Runnable{
 		panel_2.add(label);
 		panel_2.add(label_1);
 		panel_2.add(label_2);
-
+		
+		
 		JLabel label_3=new JLabel("Browse:");
 		label_3.setHorizontalAlignment(SwingConstants.LEFT);
 		label_3.setForeground(Color.WHITE);
