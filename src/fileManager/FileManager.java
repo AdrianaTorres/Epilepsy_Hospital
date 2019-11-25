@@ -50,6 +50,7 @@ public class FileManager {
 	
 	public static List[] getUserAndPasswords(){
 		try {
+			isConfigured();
 			bf= new BufferedReader(new InputStreamReader(new FileInputStream(userpasswdPath)));
 			List <String> userNames= new ArrayList<String>();
 			List <String> passwords= new ArrayList<String>();
