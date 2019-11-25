@@ -45,6 +45,7 @@ public class GuiHospital extends JFrame implements Runnable{
 	private JPanel contentPane;
 	private JTextField tag;
 	private static List<String> users;
+	private String rP=System.getProperty("user.dir")+"\\resources";
 	/**
 	 * Create the frame.
 	 */
@@ -184,7 +185,7 @@ public class GuiHospital extends JFrame implements Runnable{
 
 		try {
 			BufferedImage nominal;
-			nominal = ImageIO.read(new File("C:\\Users\\Sloth Thy Lord\\Documents\\Sloth thy lord\\Biomédica\\quinto año\\Telemedicina\\logo.jpg"));
+			nominal = ImageIO.read(new File(rP+"\\logo.jpg"));
 			JLabel picLabel = new JLabel(new ImageIcon(nominal));
 			panel_4.add(picLabel,BorderLayout.NORTH);
 		}catch(Exception ex) {
