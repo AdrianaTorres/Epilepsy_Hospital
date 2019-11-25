@@ -298,49 +298,49 @@ public class HospitalConnection implements Runnable {
     	List <Double> eeg=new ArrayList<Double>();
     	List <Double> timeEEG=new ArrayList<Double>();
     	List <Double> timeECG=new ArrayList<Double>();
-    	boolean phase1=false;
+    	String temp;
+    	String instruction="";
+    	String comments="";
     	int counter=0;
-    	while (true) {
+    	while(true) {
     		try {
-    			String read=bf.readLine();
-    			if(read.contains("ECG")) {
-    				phase1=true;
-    				counter=0;
-    			}
-    			if(read.contains("EEG")) {
-    				phase1=false;
-    				counter=0;
-    			}
-    			if(read.equals("FINISHED MONITORING")) {
-    				break;
-    			}
-    			try {
-    				Double.parseDouble(read);
-    				if(phase1) {
-        				if(counter%2==0) {
-        					timeECG.add(Double.parseDouble(read));
-        					counter++;
-        				}else {
-        					ecg.add(Double.parseDouble(read));
-        					counter++;
-        				}
-        			}else {
-        				if(counter%2==0) {
-        					timeEEG.add(Double.parseDouble(read));
-        					counter++;
-        				}else {
-        					eeg.add(Double.parseDouble(read));
-        					counter++;
-        				}
-        			}
-    			}catch(Exception e) {
-    				continue;
-    			}
+				temp =bf.readLine();
+				try {
+					double data=Double.parseDouble(temp);
+					if(instruction.contains("ECG")) {
+						if(counter%2==0) {
+							timeECG.add(data);
+						}else {
+							ecg.add(data);
+						}
+						counter++;
+					}
+					if(instruction.contains("EEG")) {
+						if(counter%2==0) {
+							timeEEG.add(data);
+						}else {
+							eeg.add(data);
+						}
+						counter++;
+					}
+					
+				}catch(Exception e) {
+					System.out.println(temp);
+					instruction=temp;
+					counter=0;
+					if(instruction.contains("COMMENTS")) {
+						comments=temp;
+					}
+					if(instruction.contains("DONE")) {
+						break;
+					}
+				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				System.out.println("error reading report ");
 				e.printStackTrace();
 			}
     	}
+    	FileManager.setreport(new List[] {timeECG,ecg}, new List[] {timeEEG,eeg}, comments, currentUserName);
     }
     
     public void answerNewReport () {
