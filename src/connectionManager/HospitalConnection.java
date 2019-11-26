@@ -297,56 +297,6 @@ public class HospitalConnection implements Runnable {
     }
     
     public void answerMonitoring () {
-    	List <Double> ecg= new ArrayList<Double>();
-    	List <Double> eeg=new ArrayList<Double>();
-    	List <Double> timeEEG=new ArrayList<Double>();
-    	List <Double> timeECG=new ArrayList<Double>();
-    	String temp;
-    	String instruction="";
-    	String comments="";
-    	int counter=0;
-    	while(true) {
-    		try {
-				temp =bf.readLine();
-				try {
-					double data=Double.parseDouble(temp);
-					if(instruction.contains("ECG")) {
-						if(counter%2==0) {
-							timeECG.add(data);
-						}else {
-							ecg.add(data);
-						}
-						counter++;
-					}
-					if(instruction.contains("EEG")) {
-						if(counter%2==0) {
-							timeEEG.add(data);
-						}else {
-							eeg.add(data);
-						}
-						counter++;
-					}
-					
-				}catch(Exception e) {
-					System.out.println(temp);
-					instruction=temp;
-					counter=0;
-					if(instruction.contains("COMMENTS")) {
-						comments=temp;
-					}
-					if(instruction.contains("DONE")) {
-						break;
-					}
-				}
-			} catch (IOException e) {
-				System.out.println("error reading report ");
-				e.printStackTrace();
-			}
-    	}
-    	FileManager.setreport(new List[] {timeECG,ecg}, new List[] {timeEEG,eeg}, comments, currentUserName);
-    }
-    
-    public void answerNewReport () {
     	List <Double> data = new ArrayList<Double>();
     	List <Double> time = new ArrayList<Double>();
     	boolean phase1=false;
@@ -392,7 +342,57 @@ public class HospitalConnection implements Runnable {
 				e.printStackTrace();
 			}
     	}
-    	
+    }
+    
+    public void answerNewReport () {
+    	List <Double> ecg= new ArrayList<Double>();
+    	List <Double> eeg=new ArrayList<Double>();
+    	List <Double> timeEEG=new ArrayList<Double>();
+    	List <Double> timeECG=new ArrayList<Double>();
+    	String temp;
+    	String instruction="";
+    	String comments="";
+    	int counter=0;
+    	GuiHospital.updateClients(currentUserName, "SYMPTOMS");
+    	while(true) {
+    		try {
+				temp =bf.readLine();
+				try {
+					double data=Double.parseDouble(temp);
+					if(instruction.contains("ECG")) {
+						if(counter%2==0) {
+							timeECG.add(data);
+						}else {
+							ecg.add(data);
+						}
+						counter++;
+					}
+					if(instruction.contains("EEG")) {
+						if(counter%2==0) {
+							timeEEG.add(data);
+						}else {
+							eeg.add(data);
+						}
+						counter++;
+					}
+					
+				}catch(Exception e) {
+					System.out.println(temp);
+					instruction=temp;
+					counter=0;
+					if(instruction.contains("COMMENTS")) {
+						comments=temp;
+					}
+					if(instruction.contains("DONE")) {
+						break;
+					}
+				}
+			} catch (IOException e) {
+				System.out.println("error reading report ");
+				e.printStackTrace();
+			}
+    	}
+    	FileManager.setreport(new List[] {timeECG,ecg}, new List[] {timeEEG,eeg}, comments, currentUserName);
     }
     
     public void answerAlert () {
