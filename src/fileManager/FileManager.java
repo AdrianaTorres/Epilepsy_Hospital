@@ -77,9 +77,36 @@ public class FileManager {
 	
 	public static void setUserAndPassword(String username, String password) {
 		try {
+			bf= new BufferedReader(new InputStreamReader(new FileInputStream(userpasswdPath)));
+			String temp="";
+			int counter=0;
+			ArrayList<String> passw =new ArrayList <String>();
+			ArrayList<String> users =new ArrayList <String>();
+			while(temp!=null) {
+				temp=bf.readLine();
+				if(temp==null) {
+					break;
+				}
+				System.out.println(temp);
+				if(counter%2==1) {
+					passw.add(temp);
+				}else {
+					users.add(temp);
+				}
+				counter++;
+			}
 			pw = new PrintWriter(new FileOutputStream(userpasswdPath),true);
 			pw.println(username);
 			pw.println(password);
+			Iterator iterator1 = passw.iterator();
+			for (Iterator iterator = users.iterator(); iterator.hasNext();) {
+				String us = (String) iterator.next();
+				String pa = (String) iterator1.next();
+				pw.println(us);
+				pw.println(pa);
+			}
+			bf.close();
+			pw.close();
 		}catch(Exception e) {
 			System.out.println("could not add user or password");
 			e.printStackTrace();
@@ -214,17 +241,43 @@ public class FileManager {
 		}
 	}
 	
-	public static void setUserConfig(User us) {
+	public static void setUserConfig(User user) {
 		try {
-			
+			bf= new BufferedReader(new InputStreamReader(new FileInputStream(usersData)));
+			String temp="";
+			ArrayList<User> users= new ArrayList<User>();
+			users.add(user);
+			while(temp!=null) {
+				temp=bf.readLine();
+				if(temp==null) {
+					break;
+				}
+				else {
+					String username= bf.readLine();
+					String name=bf.readLine();
+					String surname=bf.readLine();
+					int weight= Integer.parseInt(bf.readLine());
+					int age=Integer.parseInt(bf.readLine());
+					char gender=bf.readLine().toCharArray()[0];
+					User t = new User(name, surname, weight, age, gender, username);
+					users.add(t);
+					bf.readLine();
+				}
+			}
 			pw= new PrintWriter(new FileOutputStream(usersData),true);
-			pw.println(us.getUserName());
-			pw.println(us.getName());
-			pw.println(us.getSurname());
-			pw.println(us.getWeight());
-			pw.println(us.getAge());
-			pw.println(us.getGender());
-			pw.println();
+			for (Iterator iterator = users.iterator(); iterator.hasNext();) {
+				User us = (User) iterator.next();
+				pw.println();
+				pw.println(us.getUserName());
+				pw.println(us.getName());
+				pw.println(us.getSurname());
+				pw.println(us.getWeight());
+				pw.println(us.getAge());
+				pw.println(us.getGender());
+			}
+			bf.close();
+			pw.close();
+
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.out.println("could not add the user!");

@@ -51,7 +51,7 @@ public class HospitalConnection implements Runnable {
 
     @Override
     public void run() {
-        String request = null;
+        String request = "";
         
         try {
 			request = bf.readLine();
@@ -65,13 +65,13 @@ public class HospitalConnection implements Runnable {
         		System.out.println("login");
         		answerLogin();
         		boolean connected = true;
-        		String request2 = null;
+        		String request2 = "";
         		while (connected) {    			
         			try {
 						request2=bf.readLine();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						this.answerFinishSession();
+						System.out.println("client disconnected");
 					}
         			System.out.println(request2);
         			switch (request2) {
@@ -87,7 +87,10 @@ public class HospitalConnection implements Runnable {
         				case "FINISHED MONITORING":
         					answerFinishSession();
         					connected = false;
-        					break;        				
+        					break;  
+        				default:
+        					connected= false;
+        					break;
         			}
         			}
         	
@@ -98,9 +101,9 @@ public class HospitalConnection implements Runnable {
         		String request3 = null;
         		try {
         			request3 = bf.readLine();
-        		} catch (IOException e) {
-        			// TODO Auto-generated catch block
-        			e.printStackTrace();
+        		} catch (Exception e) {
+        			System.out.println("miss me with that disconnection shit");
+        			break;
         		}
         		if (request3.equals("USER REQUESTING NEW USER PROFILE")) {
         			answerProfileData();
@@ -120,32 +123,32 @@ public class HospitalConnection implements Runnable {
 
         try {
             is.close();
-        } catch (IOException ex) {
-            Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            System.out.println("could not close input Stream!");
         }
         
         try {
             os.close();
-        } catch (IOException ex) {
-            Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            System.out.println("could not close output Stream!");
         }
         
         try {
             pw.close();
         } catch (Exception ex) {
-            Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("could not close the printwriter!");
         }
 
         try {
             br.close();
-        } catch (IOException ex) {
-            Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            System.out.println("could not close the buffered reader!");
         }
         
         try {
             socket.close();
-        } catch (IOException ex) {
-            Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            System.out.println("The socket just fuckin died, must have been the client");
         }
 
     }
@@ -173,6 +176,7 @@ public class HospitalConnection implements Runnable {
     			}
     		}
     		if(confirmed) {
+    			GuiHospital.updateClients(userName,"NOMINAL");
     			pw.println("ACCEPTED");
     			currentUserName = userName;
     			currentPassword = password;
@@ -209,7 +213,6 @@ public class HospitalConnection implements Runnable {
 				if(profileExists) {
 					pw.println("DENIED");
 				}else {
-					fileManager.FileManager.setUserAndPassword(userName, password);
 		    		currentUserName = userName;
 		    		currentPassword = password;
 		    		/*I really dunno if the application was built to create the profile and login at the same time...
@@ -220,8 +223,8 @@ public class HospitalConnection implements Runnable {
 	    	}else {
 	    		pw.println("DENIED");
 	    	}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("could not recieve a proper response, we still flying though");
 			pw.println("DENIED");
 		}
     }
@@ -393,13 +396,14 @@ public class HospitalConnection implements Runnable {
     }
     
     public void answerAlert () {
-    	GuiHospital.updateClients(this.currentUserName);
+    	GuiHospital.updateClients(this.currentUserName,"CRITICAL");
     }
     
     public void answerFinishSession () {
     	releaseResources (inputStream, outputStream, pw, bf, socket);
     	System.out.println ("Session finished.");
     	boolean connection = false;
+    	GuiHospital.removeClients(currentUserName);
     }
 
     private boolean isValidInput(String input) {

@@ -72,6 +72,7 @@ public class GuiHospital extends JFrame implements Runnable{
 		}
 		return (match);
 	}
+	
 	private static void updateList(String[]filteredList) {
 		DefaultListModel<String> lm= new DefaultListModel<String>();
 		for (int i = 0; i < filteredList.length; i++) {
@@ -82,11 +83,102 @@ public class GuiHospital extends JFrame implements Runnable{
 		list.setVisible(false);
 		list.setVisible(true);
 	}
-	public static void updateClients(String clients) {
-		users.add(clients);
+	
+	private static void filterList(String client, String status) {
+		DefaultListModel <String>lm=(DefaultListModel<String>) list.getModel();
+		String[]reorder=new String[lm.size()+1];
+		ArrayList<String> nominal= new ArrayList<String>();
+		ArrayList<String> symptoms= new ArrayList<String>();
+		ArrayList<String> critical= new ArrayList<String>();
+		for (int i = 0; i < lm.size(); i++) {
+			if(lm.get(i).contains("NOMINAL")) {
+				nominal.add(lm.get(i));
+			}
+			if(lm.get(i).contains("SYMPTOMS")) {
+				symptoms.add(lm.get(i));
+			}
+			if(lm.get(i).contains("CRITICAL")) {
+				critical.add(lm.get(i));
+			}
+		}
+		if(status.contains("NOMINAL")) {
+			nominal.add(client+" ("+status+")");
+		}
+		if(status.contains("SYMPTOMS")) {
+			symptoms.add(client+" ("+status+")");
+		}
+		if(status.contains("CRITICAL")) {
+			critical.add(client+" ("+status+")");
+		}
+		int counter=0;
+		for (Iterator iterator = critical.iterator(); iterator.hasNext();) {
+			String criticaltemp=(String) iterator.next();
+			reorder[counter]=criticaltemp;
+			counter++;
+		}
+		for (Iterator iterator = symptoms.iterator(); iterator.hasNext();) {
+			reorder[counter]=(String) iterator.next();
+			counter++;
+		}
+		for (Iterator iterator = nominal.iterator(); iterator.hasNext();) {
+			reorder[counter]=(String) iterator.next();
+			counter++;
+		}
+		lm.removeAllElements();
+		for (int i = 0; i < reorder.length; i++) {
+			lm.addElement(reorder[i]);
+			System.out.println(reorder[i]);
+		}
+		list.setModel(lm);
+		list.setVisible(false);
+		list.setVisible(true);
 	}
+	
+	public static void updateClients(String clients, String status) {
+		String client =clients+" ("+status+")";
+		boolean exists=false;
+		for (Iterator iterator = users.iterator(); iterator.hasNext();) {
+			String string = (String) iterator.next();
+			if(string.equals(client)) {
+				exists=true;
+				DefaultListModel<String> lm= new DefaultListModel<String>();
+				for (int i = 0; i < list.getModel().getSize(); i++) {
+					if(!list.getModel().getElementAt(i).equals(client)) {
+						String temp=(String) list.getModel().getElementAt(i);
+						lm.addElement(temp);
+					}
+				}
+				list.setModel(lm);
+				break;
+			}
+		}
+		if(!exists) {
+			users.add(clients+" ("+status+")");
+		}
+		filterList(clients, status);
+		System.out.println("I am summoned!");
+	}
+	
 	public static void removeClients(String clients) {
-		users.remove(clients);
+		DefaultListModel<String>lm =(DefaultListModel<String>) list.getModel();
+		ArrayList <String>temp= new ArrayList <String>();
+		String element="";
+		for (int i = 0; i < lm.getSize(); i++) {
+			if(!lm.getElementAt(i).contains(clients)) {
+				temp.add(lm.getElementAt(i));
+			}else {
+				element=lm.getElementAt(i);
+			}
+		}
+		lm= new DefaultListModel<String>();
+		for (Iterator iterator = temp.iterator(); iterator.hasNext();) {
+			String string = (String) iterator.next();
+			lm.addElement(string);;
+		}
+		list.setModel(lm);
+		list.setVisible(false);
+		list.setVisible(true);
+		users.remove(element);
 	}
 
 	@Override
