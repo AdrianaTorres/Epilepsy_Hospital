@@ -26,7 +26,6 @@ public class HospitalConnection implements Runnable {
     OutputStream outputStream; 
 	PrintWriter pw;
 	BufferedReader bf;
-	Thread t;
 	Boolean requestedMonitoring;
 	
 	User currentUser = new User (" ", " ", 0, 0, ' ', " ");
@@ -40,7 +39,7 @@ public class HospitalConnection implements Runnable {
 			bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			requestedMonitoring=false;
 		} catch (Exception e) {
-			System.out.println("could not connect to server!");
+			System.out.println("Could not connect to server!");
 			socket = null;
 			pw = null;
 			bf = null;
@@ -406,7 +405,7 @@ public class HospitalConnection implements Runnable {
     	GuiHospital.removeClients(currentUserName);
     }
 
-    private boolean isValidInput(String input) {
+    public static boolean isValidInput(String input) {
     	char[] check=input.toCharArray();
     	char[] whitelist= {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',' ','0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
     	boolean valid=false;
