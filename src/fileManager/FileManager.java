@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import security.FileEncryptor;
+
 public class FileManager {
 	private static String userpasswdPath=System.getProperty("user.dir")+"\\whiteList.txt";
 	private static String usersData=System.getProperty("user.dir")+"\\clients.txt";
@@ -63,6 +65,7 @@ public class FileManager {
 				if(counter%2==0) {
 					userNames.add((String) read);
 				}else {
+					read=FileEncryptor.decryptString(read);
 					passwords.add((String) read);
 				}
 				counter++;
@@ -80,6 +83,7 @@ public class FileManager {
 			bf= new BufferedReader(new InputStreamReader(new FileInputStream(userpasswdPath)));
 			String temp="";
 			int counter=0;
+			password=FileEncryptor.encryptString(password);
 			ArrayList<String> passw =new ArrayList <String>();
 			ArrayList<String> users =new ArrayList <String>();
 			while(temp!=null) {
@@ -89,6 +93,7 @@ public class FileManager {
 				}
 				System.out.println(temp);
 				if(counter%2==1) {
+					temp=FileEncryptor.encryptString(temp);
 					passw.add(temp);
 				}else {
 					users.add(temp);
