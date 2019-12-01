@@ -451,26 +451,26 @@ public class HospitalConnection implements Runnable {
 				's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
 				'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
 				'X', 'Y', 'Z' };
-		boolean valid = false;
-		int counter = 0;
-		for (int i = 0; i < check.length; i++) {
-			char temp = check[i];
-			boolean found = false;
+		boolean valid=false;
+    	int counter=0;
+    	for (int i = 0; i < check.length; i++) {
+			char temp=check[i];
+			boolean found=false;
 			for (int j = 0; j < whitelist.length; j++) {
-				if (temp == whitelist[j]) {
-					found = true;
+				if(temp==whitelist[j]) {
+					found=true;
 					break;
 				}
 			}
-			if (!found) {
+			if(!found) {
 				break;
-			} else {
+			}else {
 				counter++;
 			}
 		}
-		if (counter == check.length) {
-			valid = true;
-		}
+    	if(counter==check.length) {
+    		valid=true;
+    	}
 		return valid;
 	}
 

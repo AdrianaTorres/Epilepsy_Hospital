@@ -252,6 +252,34 @@ public class FileManager {
 		}
 	}
 	
+	public static User getDoctorConfig(String userName) {
+		try {
+			bf= new BufferedReader(new InputStreamReader(new FileInputStream(usersData)));
+			User us=null;
+			String read;
+			while(true) {
+				read=bf.readLine();
+				if(read==null) {
+					break;
+				}else {
+					if(read.equals(userName)) {
+						String name= bf.readLine();
+						String surname=bf.readLine();
+						us= new User(name,surname);
+						break;
+					}else {
+						continue;
+					}
+				}
+			}
+			return us;
+		}catch(Exception e) {
+			System.out.println("Could not read doctor configuration!");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static void setUserConfig(User user) {
 		try {
 			bf= new BufferedReader(new InputStreamReader(new FileInputStream(usersData)));

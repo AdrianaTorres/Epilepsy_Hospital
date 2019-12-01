@@ -6,23 +6,23 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Server implements Runnable {
+public class Server_Doctor implements Runnable {
 	
-    ServerSocket serverSocket = null;
+    ServerSocket serverSocket_Doctor = null;
 	
-    public Server () {
-		this.serverSocket = serverSocket;
+    public Server_Doctor () {
+		this.serverSocket_Doctor = serverSocket_Doctor;
 	}
 	
 	public void run ()  {
    
         try {
-        	serverSocket = new ServerSocket(9000);
+        	serverSocket_Doctor = new ServerSocket(9000);
             while (true) {
                 //This executes when we have a client
-                Socket socket = serverSocket.accept();
+                Socket socket = serverSocket_Doctor.accept();
                 try {
-                	new Thread(new HospitalConnection(socket)).start();
+                	new Thread(new HospitalDoctorConnection(socket)).start();
                 }catch(Exception e) {
                 	System.out.println("Could not connect patient");
                 }
@@ -31,13 +31,13 @@ public class Server implements Runnable {
         } catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-            releaseResourcesServer(serverSocket);
+            releaseResourcesServer(serverSocket_Doctor);
         }
     }
 
-    private static void releaseResourcesServer(ServerSocket serverSocket) {
+    private static void releaseResourcesServer(ServerSocket serverSocket_Doctor) {
         try {
-            serverSocket.close();
+            serverSocket_Doctor.close();
         } catch (IOException ex) {
             Logger.getLogger(HospitalConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
