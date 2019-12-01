@@ -1,6 +1,7 @@
 package mainMethodHospital;
 
 import java.util.ArrayList;
+
 import connectionManager.Server;
 import guiHospital.GuiHospital;
 

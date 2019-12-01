@@ -30,15 +30,27 @@ public class Security {
 		}
 	}
 
-	public static String decryptMessage(String encryptedText, PublicKey publicKey) throws Exception {
-		Cipher cipher = Cipher.getInstance("RSA");
-		cipher.init(Cipher.DECRYPT_MODE, publicKey);
-		return new String(cipher.doFinal(Base64.getDecoder().decode(encryptedText)));
+	public static String decryptMessage(String encryptedText, PublicKey publicKey){
+		try {
+			Cipher cipher = Cipher.getInstance("RSA");
+			cipher.init(Cipher.DECRYPT_MODE, publicKey);
+			return new String(cipher.doFinal(Base64.getDecoder().decode(encryptedText)));
+		}catch(Exception e) {
+			System.out.println("what the fuck is that even supposed to mean??");
+			return "";
+		}
+		
 	}
 
-	public static String encryptMessage(String plainText, PrivateKey privateKey) throws Exception {
-		Cipher cipher = Cipher.getInstance("RSA");
-		cipher.init(Cipher.ENCRYPT_MODE, privateKey);
-		return Base64.getEncoder().encodeToString(cipher.doFinal(plainText.getBytes()));
+	public static String encryptMessage(String plainText, PrivateKey privateKey){
+		try {
+			Cipher cipher = Cipher.getInstance("RSA");
+			cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+			return Base64.getEncoder().encodeToString(cipher.doFinal(plainText.getBytes()));
+		}catch(Exception e) {
+			System.out.println("I really don't know what to say here... Weird flex but ok I guess");
+			return "";
+		}
+		
 	}
 }

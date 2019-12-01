@@ -17,6 +17,8 @@ import security.FileEncryptor;
 
 public class FileManager {
 	private static String userpasswdPath=System.getProperty("user.dir")+"\\whiteList.txt";
+	private static String doctorPath=System.getProperty("user.dir")+"\\DoctorWhiteList.txt";
+	private static String doctorData=System.getProperty("user.dir")+"\\Doctors.txt";
 	private static String usersData=System.getProperty("user.dir")+"\\clients.txt";
 	private static String reportDir=System.getProperty("user.dir")+"\\reports";
 	
@@ -34,12 +36,16 @@ public class FileManager {
 		File conf= new File(userpasswdPath);
 		File report= new File(reportDir);
 		File usdata =new File(usersData);
-		if(!conf.isFile()||!report.isDirectory()||!usdata.isFile()) {
+		File docdata=new File(doctorPath);
+		File docprofile= new File(doctorData);
+		if(!conf.isFile()||!report.isDirectory()||!usdata.isFile()|| !docdata.isFile() ||!docprofile.isFile()) {
 			try {
 				conf.createNewFile();
 				report.mkdir();
 				usdata.createNewFile();
 				System.out.println(conf.getAbsolutePath());
+				docdata.createNewFile();
+				docprofile.createNewFile();
 				return true;
 			} catch (IOException e) {
 				System.out.println("not possible to create config File or folder...");
@@ -318,6 +324,107 @@ public class FileManager {
 			bf.close();
 		}catch(Exception e) {
 			System.out.println("could not close buffered reader");
+		}
+	}
+	public void setDoctorUsernameAndPassword(String username, String password) {
+		try {
+			password= FileEncryptor.encryptString(password);
+			bf= new BufferedReader(new InputStreamReader(new FileInputStream(doctorPath)));
+			pw= new PrintWriter(new FileOutputStream(doctorPath),true);
+			ArrayList <String> content= new ArrayList <String>();
+			String read="";
+			while(read!=null) {
+				read=bf.readLine();
+				if(read==null) {
+					break;
+				}
+				content.add(read);
+			}
+			content.add(username);
+			content.add(password);
+			for (Iterator iterator = content.iterator(); iterator.hasNext();) {
+				String string = (String) iterator.next();
+				pw.println(string);
+			}
+			pw.close();
+			bf.close();
+		}catch(Exception e) {
+			System.out.println("Could not write the doctor down");
+		}
+	}
+	public void setDoctorProfile(String username, String name) {
+		try {
+			bf= new BufferedReader(new InputStreamReader(new FileInputStream(doctorData)));
+			pw= new PrintWriter(new FileOutputStream(doctorData),true);
+			ArrayList <String> content= new ArrayList <String>();
+			String read="";
+			while(read!=null) {
+				read= bf.readLine();
+				if(read==null) {
+					break;
+				}
+				content.add(read);
+			}
+			content.add(username);
+			content.add(name);
+			content.add("");
+			for (Iterator iterator = content.iterator(); iterator.hasNext();) {
+				String string = (String) iterator.next();
+				pw.println(string);
+			}
+			pw.close();
+			bf.close();
+		}catch(Exception e) {
+			System.out.println("could not write down the given doctor's profile");
+		}
+	}
+	public List[] getDoctorUsernamesAndPasswords() {
+		ArrayList <String> usernames = new ArrayList<String>();
+		ArrayList <String> passwords = new ArrayList<String>();
+		try {
+			bf= new BufferedReader(new InputStreamReader(new FileInputStream(doctorPath)));
+			String read="";
+			int counter=0;
+			while(read!=null) {
+				read=bf.readLine();
+				if(read==null) {
+					break;
+				}
+				if(counter%2==0) {
+					usernames.add(read);
+				}else {
+					passwords.add(read);
+				}
+				counter++;
+			}
+			return new List[] {usernames, passwords};
+		}catch(Exception e) {
+			System.out.println("could not read doctors!");
+			return  new List[]{usernames,passwords};
+		}
+	}
+	public String[] getdoctorProfile(String username) {
+		String[] goAndFetch= new String[2];
+		try {
+			bf= new BufferedReader(new InputStreamReader(new FileInputStream(doctorPath)));
+			String read="";
+			while(read!=null) {
+				read=bf.readLine();
+				if(read==null) {
+					break;
+				}else {
+					if(read.equals(username)) {
+						goAndFetch[0]=read;
+						read=bf.readLine();
+						goAndFetch[1]=read;
+						break;
+					}
+				}
+			}
+			return goAndFetch;
+		}catch(Exception e) {
+			System.out.println("could not fetch the doctor's profile");
+			return goAndFetch;
 		}
 	}
 }
