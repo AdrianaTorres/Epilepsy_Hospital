@@ -10,18 +10,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import fileManager.FileManager;
 import fileManager.User;
@@ -443,7 +438,6 @@ public class HospitalConnection implements Runnable {
 	public void answerFinishSession() {
 		releaseResources(inputStream, outputStream, pw, bf, socket);
 		System.out.println("Session finished.");
-		boolean connection = false;
 		GuiHospital.removeClients(currentUserName);
 	}
 
