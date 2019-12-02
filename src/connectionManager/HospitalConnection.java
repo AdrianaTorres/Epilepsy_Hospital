@@ -84,7 +84,7 @@ public class HospitalConnection implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		System.out.println(request);
 		switch (request) {
 		case "USER REQUESTING LOGIN":
 			System.out.println("login");
@@ -125,6 +125,7 @@ public class HospitalConnection implements Runnable {
 			String request3 = null;
 			try {
 				request3 = bf.readLine();
+				request3=Security.decryptMessage(request3, publicKey);
 			} catch (Exception e) {
 				System.out.println("miss me with that disconnection shit");
 				break;
@@ -231,6 +232,7 @@ public class HospitalConnection implements Runnable {
 	public void answerNewProfile() {
 		String userName = null;
 		String password = null;
+		System.out.println("pasopasopaso");
 		try {
 			userName = bf.readLine();
 			userName = Security.decryptMessage(userName, publicKey);
@@ -291,6 +293,7 @@ public class HospitalConnection implements Runnable {
 			genderS = bf.readLine();
 			genderS = Security.decryptMessage(genderS, publicKey);
 
+			System.out.println("name:"+name+" surname:"+surname+" weight:"+weightS+" age:"+ageS+" gender:"+genderS);
 			if (isValidInput(name)) {
 				currentUser.setName(name);
 			} else {
@@ -320,6 +323,7 @@ public class HospitalConnection implements Runnable {
 				rejected = true;
 			}
 			if (!rejected) {
+				System.out.println("REEEEEEEEEEEE");
 				User user = new User(name, surname, weight, age, gender, currentUserName);
 				fileManager.FileManager.setUserConfig(user);
 				FileManager.setUserAndPassword(currentUserName, currentPassword);
