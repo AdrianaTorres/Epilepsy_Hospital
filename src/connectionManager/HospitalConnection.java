@@ -3,6 +3,8 @@ package connectionManager;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,8 +15,10 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Iterator;
@@ -22,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.xml.bind.DatatypeConverter;
 
 import fileManager.FileManager;
 import fileManager.User;
@@ -479,17 +485,11 @@ public class HospitalConnection implements Runnable {
 		try {
 			request = bf.readLine();
 			
-			ByteArrayInputStream bis = new ByteArrayInputStream(request.getBytes());
-		    ObjectInputStream oInputStream = new ObjectInputStream(bis);
-			userPC = (PrivateKey) oInputStream.readObject();
-			oInputStream.close();
+		    byte[] blob= DatatypeConverter.parseBase64Binary(request);
+		    KeyFactory kf = KeyFactory.getInstance("RSA");
+		    userPC=kf.generatePrivate(new PKCS8EncodedKeySpec(blob));
 			
-			
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		    ObjectOutputStream os = new ObjectOutputStream(bos);
-		    os.writeObject(privateKey);
-		    request = bos.toString();
-			System.out.println("this is my petition:"+request);
+		    request = DatatypeConverter.printBase64Binary(privateKey.getEncoded());
 			pw.println(request);
 			
 		} catch (Exception e) {
