@@ -2,9 +2,12 @@ package connectionManager;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -23,6 +26,7 @@ public class HospitalDoctorConnection implements Runnable {
 	 Socket socket;
 	 InputStream inputStream;
 	 OutputStream outputStream; 
+	 ObjectOutputStream objectOutpuStream;
 	 PrintWriter pw;
 	 BufferedReader bf;
 	 
@@ -39,6 +43,7 @@ public class HospitalDoctorConnection implements Runnable {
 				this.socket = socket;
 				pw = new PrintWriter(socket.getOutputStream(), true);
 				bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				objectOutpuStream = new ObjectOutputStream(socket.getOutputStream());
 			} catch (Exception e) {
 				System.out.println("Could not connect to server!");
 				socket = null;
@@ -291,14 +296,10 @@ public class HospitalDoctorConnection implements Runnable {
 		
 	 }
 	 public void answerSeeReport () {
-		 
-		 	String patientName = null;
- 			String patientSurname = null;
+		
  			String reportName = null; 
 		 
 	    	try {
-	    		patientName = bf.readLine();
-	    		patientSurname = bf.readLine();
 				reportName = bf.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -306,26 +307,20 @@ public class HospitalDoctorConnection implements Runnable {
 			}
 	    	
 	    	File report;
-			ArrayList<User> users = new ArrayList<User>();
-			users = HospitalConnection.getListUsers();
-			 
-			 Iterator itu = users.iterator();
-			 while (itu.hasNext()) { 
-				 User user = (User) itu.next();
-				 
-				 if (patientName.equals(user.getName()) && patientSurname.equals(user.getSurname())) {
-					 
-				 File[] files = new File(System.getProperty("user.dir")+"\\reports").listFiles(); 
+			File[] files = new File(System.getProperty("user.dir")+"\\reports").listFiles(); 
 
-				 for (File file : files) {
-					 if (file.isFile() && file.equals(reportName)) {
+				for (File file : files) {
+					 if (file.isFile() && file.getName().equals(reportName)) {
 						 report = file;
+						 try {
+							objectOutpuStream.writeObject(report);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						};
 					 }
 			 }	 
-				 }			 
-				
-			 }
-	    	
+					    	
 	    }
 	 
 	 public void answerFinishSession () {
