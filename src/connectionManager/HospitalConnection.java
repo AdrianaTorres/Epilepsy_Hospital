@@ -45,6 +45,7 @@ public class HospitalConnection implements Runnable {
 	User currentUser = new User(" ", " ", 0, 0, ' ', " ");
 	String currentUserName;
 	String currentPassword;
+	static ArrayList<User> currentUsers = new ArrayList <User>();
 
 	public HospitalConnection(Socket socket) throws Exception {
 		try {
@@ -89,7 +90,7 @@ public class HospitalConnection implements Runnable {
 					request2 = bf.readLine();
 				} catch (IOException e) {
 					this.answerFinishSession();
-					System.out.println("client disconnected");
+					System.out.println("Client disconnected");
 				}
 				System.out.println(request2);
 				switch (request2) {
@@ -202,6 +203,7 @@ public class HospitalConnection implements Runnable {
 				currentUserName = userName;
 				currentPassword = password;
 				User user = fileManager.FileManager.getUserConfig(currentUserName);
+				currentUsers.add(user);
 				response = Security.encryptMessage(user.getName(), userPC);
 				pw.println(response);
 				response = Security.encryptMessage(user.getSurname(), userPC);
@@ -474,6 +476,10 @@ public class HospitalConnection implements Runnable {
 		return valid;
 	}
 
+	public static ArrayList<User> getListUsers (){
+		return currentUsers;
+	}
+	
 	private void handshake() {
 		String request = "";
 		try {

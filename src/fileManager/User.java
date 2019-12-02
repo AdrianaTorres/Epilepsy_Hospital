@@ -18,9 +18,10 @@ public class User {
 		this.userName=userName;
 	}
 	
-	public User (String name, String surname) {
+	public User (String name, String surname, String userName) {
 		this.name = name;
 		this.surname = surname;
+		this.userName = userName;
 	}
 	
 	public String getUserName() {

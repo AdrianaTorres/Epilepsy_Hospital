@@ -265,7 +265,7 @@ public class FileManager {
 					if(read.equals(userName)) {
 						String name= bf.readLine();
 						String surname=bf.readLine();
-						us= new User(name,surname);
+						us= new User(name,surname, userName);
 						break;
 					}else {
 						continue;
