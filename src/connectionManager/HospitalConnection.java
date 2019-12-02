@@ -51,6 +51,7 @@ public class HospitalConnection implements Runnable {
 	User currentUser = new User(" ", " ", 0, 0, ' ', " ");
 	String currentUserName;
 	String currentPassword;
+	static ArrayList<User> currentUsers = new ArrayList <User>();
 
 	public HospitalConnection(Socket socket) throws Exception {
 		try {
@@ -208,6 +209,7 @@ public class HospitalConnection implements Runnable {
 				currentUserName = userName;
 				currentPassword = password;
 				User user = fileManager.FileManager.getUserConfig(currentUserName);
+				currentUsers.add(user);
 				response = Security.encryptMessage(user.getName(), userPC);
 				pw.println(response);
 				response = Security.encryptMessage(user.getSurname(), userPC);
@@ -447,7 +449,6 @@ public class HospitalConnection implements Runnable {
 	public void answerFinishSession() {
 		releaseResources(inputStream, outputStream, pw, bf, socket);
 		System.out.println("Session finished.");
-		boolean connection = false;
 		GuiHospital.removeClients(currentUserName);
 	}
 
@@ -480,6 +481,10 @@ public class HospitalConnection implements Runnable {
 		return valid;
 	}
 
+	public static ArrayList<User> getListUsers (){
+		return currentUsers;
+	}
+	
 	private void handshake() {
 		String request = "";
 		try {

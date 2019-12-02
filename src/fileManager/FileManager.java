@@ -48,7 +48,7 @@ public class FileManager {
 				docprofile.createNewFile();
 				return true;
 			} catch (IOException e) {
-				System.out.println("not possible to create config File or folder...");
+				System.out.println("Not possible to create config File or folder...");
 				return false;
 			}
 		}else {
@@ -252,10 +252,10 @@ public class FileManager {
 		}
 	}
 	
-	public static User getDoctorConfig(String userName) {
+	public static Doctor getDoctorConfig(String userName) {
 		try {
 			bf= new BufferedReader(new InputStreamReader(new FileInputStream(usersData)));
-			User us=null;
+			Doctor doctor=null;
 			String read;
 			while(true) {
 				read=bf.readLine();
@@ -265,14 +265,14 @@ public class FileManager {
 					if(read.equals(userName)) {
 						String name= bf.readLine();
 						String surname=bf.readLine();
-						us= new User(name,surname);
+						doctor= new Doctor(name,surname, userName);
 						break;
 					}else {
 						continue;
 					}
 				}
 			}
-			return us;
+			return doctor;
 		}catch(Exception e) {
 			System.out.println("Could not read doctor configuration!");
 			e.printStackTrace();
@@ -320,6 +320,43 @@ public class FileManager {
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.out.println("could not add the user!");
+		}
+	}
+	
+	public static void setDoctorConfig(Doctor doctor) {
+		try {
+			bf= new BufferedReader(new InputStreamReader(new FileInputStream(usersData)));
+			String temp="";
+			ArrayList<Doctor> doctors= new ArrayList<Doctor>();
+			doctors.add(doctor);
+			while(temp!=null) {
+				temp=bf.readLine();
+				if(temp==null) {
+					break;
+				}
+				else {
+					String username= bf.readLine();
+					String name=bf.readLine();
+					String surname=bf.readLine();
+					Doctor doct = new Doctor(name, surname, username);
+					doctors.add(doct);
+					bf.readLine();
+				}
+			}
+			pw= new PrintWriter(new FileOutputStream(usersData),true);
+			for (Iterator iterator = doctors.iterator(); iterator.hasNext();) {
+				User us = (User) iterator.next();
+				pw.println();
+				pw.println(us.getUserName());
+				pw.println(us.getName());
+				pw.println(us.getSurname());
+			}
+			bf.close();
+			pw.close();
+
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Could not add the doctor!");
 		}
 	}
 	
