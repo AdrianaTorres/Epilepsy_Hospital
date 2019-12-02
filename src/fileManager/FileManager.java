@@ -48,7 +48,7 @@ public class FileManager {
 				docprofile.createNewFile();
 				return true;
 			} catch (IOException e) {
-				System.out.println("not possible to create config File or folder...");
+				System.out.println("Not possible to create config File or folder...");
 				return false;
 			}
 		}else {

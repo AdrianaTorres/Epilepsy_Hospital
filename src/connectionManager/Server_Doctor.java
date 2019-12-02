@@ -17,7 +17,7 @@ public class Server_Doctor implements Runnable {
 	public void run ()  {
    
         try {
-        	serverSocket_Doctor = new ServerSocket(9001);
+        	serverSocket_Doctor = new ServerSocket(9009);
             while (true) {
                 //This executes when we have a client
                 Socket socket = serverSocket_Doctor.accept();

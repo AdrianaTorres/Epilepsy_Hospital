@@ -11,6 +11,6 @@ public class MainHospital {
 	public static void main(String[] args) throws Exception {
 		new Thread(new GuiHospital(new ArrayList<String>())).start();
 		new Thread(new Server()).start();
-		new Thread (new Server_Doctor());
+		new Thread (new Server_Doctor()).start();
 	}
 }
