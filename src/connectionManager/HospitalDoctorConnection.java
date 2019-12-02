@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import fileManager.Doctor;
 import fileManager.FileManager;
 import fileManager.User;
 import guiHospital.GuiHospital;
@@ -34,7 +35,7 @@ public class HospitalDoctorConnection implements Runnable {
 	 private PublicKey publicKey;
 	 private PrivateKey userPC;
 	 
-	 User currentUser = new User (" ", " ", " ");
+	 Doctor currentDoctor = new Doctor (" ", " ", " ");
 	 String currentUserName;
 	 String currentPassword;
 	 
@@ -182,7 +183,7 @@ public class HospitalDoctorConnection implements Runnable {
 	    			currentPassword = password;
 	    			GuiHospital.updateClients(currentUserName,"NOMINAL");
 	    			pw.println("ACCEPTED");
-	    			currentUser = fileManager.FileManager.getDoctorConfig(currentUserName);	    			
+	    			currentDoctor = fileManager.FileManager.getDoctorConfig(currentUserName);	    			
 	    		}else {
 	    			pw.println("REJECTED");
 	    		}
@@ -240,24 +241,24 @@ public class HospitalDoctorConnection implements Runnable {
 			 surname = Security.decryptMessage(surname, publicKey);
 
 			 if (HospitalConnection.isValidInput(name)) {
-				currentUser.setName(name);
+				currentDoctor.setName(name);
 			} else {
 				rejected = true;
 				}
 			 if (HospitalConnection.isValidInput(surname)) {
-				currentUser.setSurname(surname);
+				currentDoctor.setSurname(surname);
 			} else {
 				rejected = true;
 				}
 			 
 				if (!rejected) {
-					User user = new User(name, surname, currentUserName);
-					fileManager.FileManager.setUserConfig(user);
+					Doctor doctor = new Doctor (name, surname, currentUserName);
+					fileManager.FileManager.setDoctorConfig(doctor);
 					FileManager.setUserAndPassword(currentUserName, currentPassword);
 					String response = Security.encryptMessage("ACCEPTED", userPC);
 					pw.println(response);
 					System.out.println("ACCEPTED");
-					System.out.println(user);
+					System.out.println(doctor);
 				} else {
 					String response = Security.encryptMessage("REJECTED", userPC);
 					pw.println(response);

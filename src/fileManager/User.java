@@ -9,19 +9,13 @@ public class User {
 	private int weight;
 	private char gender;
 	
-	public User(String name, String surname, int weight, int age, char gender,String userName) {
+	public User(String name, String surname, int weight, int age, char gender, String userName) {
 		this.name=name;
 		this.surname=surname;
 		this.age=age;
 		this.weight=weight;
 		this.gender=gender;
 		this.userName=userName;
-	}
-	
-	public User (String name, String surname, String userName) {
-		this.name = name;
-		this.surname = surname;
-		this.userName = userName;
 	}
 	
 	public String getUserName() {
