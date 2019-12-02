@@ -2,6 +2,8 @@ package connectionManager;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,6 +19,7 @@ import java.util.List;
 
 import fileManager.Doctor;
 import fileManager.FileManager;
+import fileManager.Report;
 import fileManager.User;
 import guiHospital.GuiHospital;
 import security.Security;
@@ -25,7 +28,6 @@ public class HospitalDoctorConnection implements Runnable {
 	 Socket socket;
 	 InputStream inputStream;
 	 OutputStream outputStream; 
-	 ObjectOutputStream objectOutpuStream;
 	 PrintWriter pw;
 	 BufferedReader bf;
 	 
@@ -42,7 +44,6 @@ public class HospitalDoctorConnection implements Runnable {
 				this.socket = socket;
 				pw = new PrintWriter(socket.getOutputStream(), true);
 				bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				objectOutpuStream = new ObjectOutputStream(socket.getOutputStream());
 			} catch (Exception e) {
 				System.out.println("Could not connect to server!");
 				socket = null;
@@ -83,7 +84,11 @@ public class HospitalDoctorConnection implements Runnable {
 						answerReportsList();
 						break;
 					case "USER REQUESTING REPORT":
-						answerSeeReport();
+						try {
+							answerSeeReport();
+						} catch (Exception e) {
+							System.out.println("Unable to show report.");
+						}
 						break;
 					case "FINISHED MONITORING":
 						answerFinishSession();
@@ -148,7 +153,7 @@ public class HospitalDoctorConnection implements Runnable {
 	        try {
 	            socket.close();
 	        } catch (Exception ex) {
-	            System.out.println("The socket just fuckin died, must have been the client");
+	            System.out.println("could not close the socket!");
 	        }
 
 	    }
@@ -294,7 +299,7 @@ public class HospitalDoctorConnection implements Runnable {
 		 }
 		
 	 }
-	 public void answerSeeReport () {
+	 public void answerSeeReport () throws Exception {
 		
  			String reportName = null; 
 		 
@@ -305,21 +310,20 @@ public class HospitalDoctorConnection implements Runnable {
 				e.printStackTrace();
 			}
 	    	
-	    	File report;
-			File[] files = new File(System.getProperty("user.dir")+"\\reports").listFiles(); 
-
-				for (File file : files) {
-					 if (file.isFile() && file.getName().equals(reportName)) {
-						 report = file;
-						 try {
-							objectOutpuStream.writeObject(report);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						};
-					 }
-			 }	 
-					    	
+	    	File report = new File (System.getProperty("user.dir")+"\\reports" + reportName);
+	    	try {
+				FileReader fr = new FileReader (report);
+				BufferedReader br = new BufferedReader(fr);
+				
+				while (br.readLine() != null) {
+					pw.println(br.readLine());
+				}
+	    	
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
 	    }
 	 
 	 public void answerFinishSession () {
