@@ -20,6 +20,7 @@ public class Server_Doctor implements Runnable {
         	serverSocket_Doctor = new ServerSocket(9009);
             while (true) {
                 //This executes when we have a client
+            	System.out.println("this is a doctor");
                 Socket socket = serverSocket_Doctor.accept();
                 try {
                 	new Thread(new HospitalDoctorConnection(socket)).start();

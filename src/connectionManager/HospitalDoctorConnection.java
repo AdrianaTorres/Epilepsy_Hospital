@@ -169,14 +169,18 @@ public class HospitalDoctorConnection implements Runnable {
 			}
 	    	
 	    	if (HospitalConnection.isValidInput(userName)) {
-	    		List users = fileManager.FileManager.getUserAndPasswords()[0];
-	    		List passwords = fileManager.FileManager.getUserAndPasswords()[1];
+	    		List users = fileManager.FileManager.getDoctorUsernamesAndPasswords()[0];
+	    		List passwords = fileManager.FileManager.getDoctorUsernamesAndPasswords()[1];
 	    		
 	    		Iterator itu = users.iterator();
 	    		Iterator itp = passwords.iterator();
 	    		boolean confirmed=false;
 	    		while (itu.hasNext() & itp.hasNext()) {
-	    			if (userName.equals(itu.next()) && password.equals(itp.next())) {
+	    			System.out.println(userName);
+	    			String o= (String)itu.next();
+	    			String z= (String)itp.next();
+	    			System.out.println(o+"   "+z);
+	    			if (userName.equals(o) && password.equals(z)) {
 	    				confirmed=true;
 	    				break;
 	    			}
@@ -184,7 +188,6 @@ public class HospitalDoctorConnection implements Runnable {
 	    		if(confirmed) {
 	    			currentUserName = userName;
 	    			currentPassword = password;
-	    			GuiHospital.updateClients(currentUserName,"NOMINAL");
 	    			pw.println("ACCEPTED");
 	    			currentDoctor = fileManager.FileManager.getDoctorConfig(currentUserName);	    			
 	    		}else {
@@ -198,9 +201,7 @@ public class HospitalDoctorConnection implements Runnable {
 			String password = null;
 			try {
 				userName = bf.readLine();
-				userName = Security.decryptMessage(userName, publicKey);
 				password = bf.readLine();
-				password = Security.decryptMessage(password, publicKey);
 				System.out.println(userName + "   " + password);
 				if (HospitalConnection.isValidInput(userName) && HospitalConnection.isValidInput(password)) {
 					List<String> users = FileManager.getUserAndPasswords()[0];
@@ -213,21 +214,21 @@ public class HospitalDoctorConnection implements Runnable {
 						}
 					}
 					if (profileExists) {
-						String response = Security.encryptMessage("DENIED", userPC);
+						String response = "DENIED";
 						pw.println(response);
 					} else {
 						currentUserName = userName;
 						currentPassword = password;
-						String response = Security.encryptMessage("CONFIRM", userPC);
+						String response= "CONFIRM";
 						pw.println(response);
 					}
 				} else {
-					String response = Security.encryptMessage("DENIED", userPC);
+					String response = "DENIED";
 					pw.println(response);
 				}
 			} catch (Exception e) {
 				System.out.println("could not recieve a proper response, we still flying though");
-				String response = Security.encryptMessage("DENIED", userPC);
+				String response = "DENIED";
 				pw.println(response);
 			}
 	 }
@@ -239,9 +240,8 @@ public class HospitalDoctorConnection implements Runnable {
 
 		 try {
 			 name = bf.readLine();
-			 name = Security.decryptMessage(name, publicKey);
 			 surname = bf.readLine();
-			 surname = Security.decryptMessage(surname, publicKey);
+			 /*comprobar que el username no existe tienes la funcion ya hecha.*/
 
 			 if (HospitalConnection.isValidInput(name)) {
 				currentDoctor.setName(name);
@@ -256,21 +256,21 @@ public class HospitalDoctorConnection implements Runnable {
 			 
 				if (!rejected) {
 					Doctor doctor = new Doctor (name, surname, currentUserName);
-					fileManager.FileManager.setDoctorConfig(doctor);
-					FileManager.setUserAndPassword(currentUserName, currentPassword);
-					String response = Security.encryptMessage("ACCEPTED", userPC);
+					fileManager.FileManager.setDoctorProfile(doctor.getUserName(),doctor.getName(), doctor.getSurname());
+					FileManager.setDoctorUsernameAndPassword(currentUserName, currentPassword);
+					String response = "ACCEPTED";
 					pw.println(response);
 					System.out.println("ACCEPTED");
 					System.out.println(doctor);
 				} else {
-					String response = Security.encryptMessage("REJECTED", userPC);
+					String response = "REJECTED";
 					pw.println(response);
 					System.out.println("REJECTED");
 				}
 
 			} catch (IOException e) {
 				e.printStackTrace();
-				String response = Security.encryptMessage("REJECTED", userPC);
+				String response = "REJECTED";
 				pw.println(response);
 			}
 		 

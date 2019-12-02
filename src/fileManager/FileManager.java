@@ -323,43 +323,6 @@ public class FileManager {
 		}
 	}
 	
-	public static void setDoctorConfig(Doctor doctor) {
-		try {
-			bf= new BufferedReader(new InputStreamReader(new FileInputStream(usersData)));
-			String temp="";
-			ArrayList<Doctor> doctors= new ArrayList<Doctor>();
-			doctors.add(doctor);
-			while(temp!=null) {
-				temp=bf.readLine();
-				if(temp==null) {
-					break;
-				}
-				else {
-					String username= bf.readLine();
-					String name=bf.readLine();
-					String surname=bf.readLine();
-					Doctor doct = new Doctor(name, surname, username);
-					doctors.add(doct);
-					bf.readLine();
-				}
-			}
-			pw= new PrintWriter(new FileOutputStream(usersData),true);
-			for (Iterator iterator = doctors.iterator(); iterator.hasNext();) {
-				User us = (User) iterator.next();
-				pw.println();
-				pw.println(us.getUserName());
-				pw.println(us.getName());
-				pw.println(us.getSurname());
-			}
-			bf.close();
-			pw.close();
-
-		}catch(Exception e) {
-			e.printStackTrace();
-			System.out.println("Could not add the doctor!");
-		}
-	}
-	
 	private static double[]parser(String data){
 		char[] temp=data.toCharArray();
 		double time=0;
@@ -391,7 +354,7 @@ public class FileManager {
 			System.out.println("could not close buffered reader");
 		}
 	}
-	public void setDoctorUsernameAndPassword(String username, String password) {
+	public static void setDoctorUsernameAndPassword(String username, String password) {
 		try {
 			password= FileEncryptor.encryptString(password);
 			bf= new BufferedReader(new InputStreamReader(new FileInputStream(doctorPath)));
@@ -417,7 +380,7 @@ public class FileManager {
 			System.out.println("Could not write the doctor down");
 		}
 	}
-	public void setDoctorProfile(String username, String name) {
+	public static void setDoctorProfile(String username, String name, String surname) {
 		try {
 			bf= new BufferedReader(new InputStreamReader(new FileInputStream(doctorData)));
 			pw= new PrintWriter(new FileOutputStream(doctorData),true);
@@ -432,6 +395,7 @@ public class FileManager {
 			}
 			content.add(username);
 			content.add(name);
+			content.add(surname);
 			content.add("");
 			for (Iterator iterator = content.iterator(); iterator.hasNext();) {
 				String string = (String) iterator.next();
@@ -443,7 +407,7 @@ public class FileManager {
 			System.out.println("could not write down the given doctor's profile");
 		}
 	}
-	public List[] getDoctorUsernamesAndPasswords() {
+	public static List[] getDoctorUsernamesAndPasswords() {
 		ArrayList <String> usernames = new ArrayList<String>();
 		ArrayList <String> passwords = new ArrayList<String>();
 		try {
@@ -458,6 +422,7 @@ public class FileManager {
 				if(counter%2==0) {
 					usernames.add(read);
 				}else {
+					read=FileEncryptor.decryptString(read);
 					passwords.add(read);
 				}
 				counter++;
@@ -468,8 +433,8 @@ public class FileManager {
 			return  new List[]{usernames,passwords};
 		}
 	}
-	public String[] getdoctorProfile(String username) {
-		String[] goAndFetch= new String[2];
+	public static String[] getdoctorProfile(String username) {
+		String[] goAndFetch= new String[3];
 		try {
 			bf= new BufferedReader(new InputStreamReader(new FileInputStream(doctorPath)));
 			String read="";
@@ -482,6 +447,8 @@ public class FileManager {
 						goAndFetch[0]=read;
 						read=bf.readLine();
 						goAndFetch[1]=read;
+						read=bf.readLine();
+						goAndFetch[2]=read;
 						break;
 					}
 				}
