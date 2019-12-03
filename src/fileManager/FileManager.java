@@ -291,7 +291,7 @@ public class FileManager {
 				if(temp==null) {
 					break;
 				}
-				else if(!temp.equals("")){
+				else if(!temp.equals("")||!temp.equals("\n")){
 					String username= bf.readLine();
 					String name=bf.readLine();
 					String surname=bf.readLine();

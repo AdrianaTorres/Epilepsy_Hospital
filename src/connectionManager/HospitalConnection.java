@@ -121,8 +121,8 @@ public class HospitalConnection implements Runnable {
 
 		case "USER REQUESTING NEW PROFILE":
 			answerNewProfile();
-			pw.println("Please finish creating the profile by filling your personal data.");
-			String request3 = null;
+			String request3 = "";
+			String reply="";
 			try {
 				request3 = bf.readLine();
 				request3=Security.decryptMessage(request3, publicKey);
@@ -134,10 +134,13 @@ public class HospitalConnection implements Runnable {
 				answerProfileData();
 				answerFinishSession();
 			} else
-				pw.println("Please fill your personal data to be able to use our services.");
+				reply= Security.encryptMessage("Stop it, get some help, seriously", userPC);
+				pw.println(reply);
 
 		default:
-			pw.println("Please login or create a new profile to be able to use our services.");
+			reply="Congrats, you managed to get an impossible error, be proud";
+			reply= Security.encryptMessage(reply, userPC);
+			pw.println(reply);
 			break;
 
 		}
