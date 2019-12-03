@@ -128,11 +128,11 @@ public class FileManager {
 	public static void setreport(List[] ecg, List[] eeg, String comments, String userName) {
 		int counter = 0;
 		File manager = new File(
-				System.getProperty("user.dir") + "\\reports\\" + userName + "report_" + counter + ".txt");
+				System.getProperty("user.dir") + "\\reports\\" + userName + "_report_" + counter + ".txt");
 		while (manager.isFile()) {
 			counter++;
 			manager = new File(
-					System.getProperty("user.dir") + "\\reports\\" + userName + "report_" + counter + ".txt");
+					System.getProperty("user.dir") + "\\reports\\" + userName + "_report_" + counter + ".txt");
 		}
 		PrintWriter data = null;
 		try {
@@ -250,34 +250,6 @@ public class FileManager {
 			return us;
 		} catch (Exception e) {
 			System.out.println("could not read user configuration!");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static Doctor getDoctorConfig(String userName) {
-		try {
-			bf = new BufferedReader(new InputStreamReader(new FileInputStream(usersData)));
-			Doctor doctor = null;
-			String read;
-			while (true) {
-				read = bf.readLine();
-				if (read == null) {
-					break;
-				} else {
-					if (read.equals(userName)) {
-						String name = bf.readLine();
-						String surname = bf.readLine();
-						doctor = new Doctor(name, surname, userName);
-						break;
-					} else {
-						continue;
-					}
-				}
-			}
-			return doctor;
-		} catch (Exception e) {
-			System.out.println("Could not read doctor configuration!");
 			e.printStackTrace();
 			return null;
 		}
@@ -439,22 +411,23 @@ public class FileManager {
 		}
 	}
 
-	public static String[] getdoctorProfile(String username) {
-		String[] goAndFetch = new String[3];
+	public static Doctor getdoctorProfile(String username) {
+		Doctor goAndFetch = new Doctor("", "", "");
 		try {
-			bf = new BufferedReader(new InputStreamReader(new FileInputStream(doctorPath)));
+			bf = new BufferedReader(new InputStreamReader(new FileInputStream(doctorData)));
 			String read = "";
 			while (read != null) {
 				read = bf.readLine();
+				System.out.println(read);
 				if (read == null) {
 					break;
 				} else {
 					if (read.equals(username)) {
-						goAndFetch[0] = read;
+						goAndFetch.setUserName(read);
 						read = bf.readLine();
-						goAndFetch[1] = read;
+						goAndFetch.setName(read);
 						read = bf.readLine();
-						goAndFetch[2] = read;
+						goAndFetch.setSurname(read);
 						break;
 					}
 				}

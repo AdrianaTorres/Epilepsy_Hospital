@@ -11,9 +11,8 @@ public class Server_Doctor implements Runnable {
     ServerSocket serverSocket_Doctor = null;
 	
     public Server_Doctor () {
-		this.serverSocket_Doctor = serverSocket_Doctor;
 	}
-	
+	@Override
 	public void run ()  {
    
         try {
@@ -25,7 +24,7 @@ public class Server_Doctor implements Runnable {
                 try {
                 	new Thread(new HospitalDoctorConnection(socket)).start();
                 }catch(Exception e) {
-                	System.out.println("Could not connect patient");
+                	System.out.println("Could not connect doctor");
                 }
                 
             }
