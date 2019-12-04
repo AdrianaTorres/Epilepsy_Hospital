@@ -189,6 +189,11 @@ public class GuiHospital extends JFrame implements Runnable{
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 		        System.out.println("WINDOW IS CLOSING");
 		        AdminLogin a= new AdminLogin();
+		        /*if ((a != null) && (!a.user.equals(null)) && (!a.password.equals(null))) {
+		        	dispose();
+		        } /*else {
+		        	System.out.println("Admin window could not be closed.");
+		        }*/
 		    }
 		});
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

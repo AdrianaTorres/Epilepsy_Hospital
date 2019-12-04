@@ -1,4 +1,11 @@
 
+lucia
+luci
+ruiz
+50
+20
+f
+
 knock
 name
 surname
