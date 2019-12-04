@@ -22,6 +22,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import connectionManager.HospitalConnection;
+import connectionManager.HospitalDoctorConnection;
+import connectionManager.Server;
+import connectionManager.Server_Doctor;
 import fileManager.FileManager;
 
 public class AdminLogin {
@@ -79,7 +83,12 @@ public class AdminLogin {
 				}
 				boolean confirm=FileManager.rootMeUp(temp,text_1.getText());
 				if(confirm) {
-					/*server resources ought to be properly closed*/
+					HospitalConnection.releaseResources(HospitalConnection.inputStream, HospitalConnection.outputStream,
+							HospitalConnection.pw, HospitalConnection.bf, HospitalConnection.socket);
+					Server.releaseResourcesServer(Server.serverSocket);
+					HospitalDoctorConnection.releaseResources(HospitalDoctorConnection.inputStream, HospitalDoctorConnection.outputStream,
+							HospitalDoctorConnection.pw, HospitalDoctorConnection.bf, HospitalDoctorConnection.socket);
+					Server_Doctor.releaseResourcesServer(Server_Doctor.serverSocket_Doctor);
 					System.exit(0);
 				}
 				else {

@@ -36,11 +36,11 @@ import security.Security;
 
 public class HospitalConnection implements Runnable {
 
-	Socket socket;
-	InputStream inputStream;
-	OutputStream outputStream;
-	PrintWriter pw;
-	BufferedReader bf;
+	public static Socket socket;
+	public static InputStream inputStream;
+	public static OutputStream outputStream;
+	public static PrintWriter pw;
+	public static BufferedReader bf;
 	Thread t;
 	Boolean requestedMonitoring;
 
@@ -149,7 +149,7 @@ public class HospitalConnection implements Runnable {
 
 	}
 
-	private static void releaseResources(InputStream is, OutputStream os, PrintWriter pw, BufferedReader br,
+	public static void releaseResources(InputStream is, OutputStream os, PrintWriter pw, BufferedReader br,
 			Socket socket) {
 
 		try {
