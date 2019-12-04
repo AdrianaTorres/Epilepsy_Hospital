@@ -1,14 +1,28 @@
 
-knock
+test4 SYMPTOMS
 name
 surname
-80
-44
+34
+123
 m
 
-ree
-name
-surname
+test3
+my name
+my surname
+67
+34
+f
+
+test2
+profile
+we
 45
-23
+67
+m
+
+test1
+my Name
+my Surname
+78
+67
 m

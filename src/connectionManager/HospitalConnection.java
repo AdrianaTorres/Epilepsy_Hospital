@@ -87,23 +87,24 @@ public class HospitalConnection implements Runnable {
 		System.out.println(request);
 		switch (request) {
 		case "USER REQUESTING LOGIN":
-			System.out.println("login");
 			answerLogin();
 			boolean connected = true;
 			String request2 = "";
 			while (connected) {
 				try {
 					request2 = bf.readLine();
+					request2 = Security.decryptMessage(request2, publicKey);
 				} catch (IOException e) {
 					this.answerFinishSession();
 					System.out.println("client disconnected");
 				}
-				System.out.println(request2);
+				System.out.println("while connected client asks for:"+ request2);
 				switch (request2) {
 				case "USER REQUESTING MONITORING":
 					answerMonitoring();
 					break;
 				case "USER REQUESTING NEW REPORT":
+					System.out.println("PASO PASO PASO");
 					answerNewReport();
 					break;
 				case "USER REQUESTING ASSISTANCE":
@@ -235,7 +236,6 @@ public class HospitalConnection implements Runnable {
 	public void answerNewProfile() {
 		String userName = null;
 		String password = null;
-		System.out.println("pasopasopaso");
 		try {
 			userName = bf.readLine();
 			userName = Security.decryptMessage(userName, publicKey);
