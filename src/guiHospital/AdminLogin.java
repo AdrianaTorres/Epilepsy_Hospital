@@ -22,6 +22,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import connectionManager.HospitalConnection;
+import connectionManager.HospitalDoctorConnection;
+import connectionManager.Server;
+import connectionManager.Server_Doctor;
 import fileManager.FileManager;
 
 public class AdminLogin {

@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 public class Server implements Runnable {
 	
-    ServerSocket serverSocket = null;
+	public static ServerSocket serverSocket = null;
 	
     public Server () {
 		this.serverSocket = serverSocket;
@@ -35,7 +35,7 @@ public class Server implements Runnable {
         }
     }
 
-    private static void releaseResourcesServer(ServerSocket serverSocket) {
+    public static void releaseResourcesServer(ServerSocket serverSocket) {
         try {
             serverSocket.close();
         } catch (IOException ex) {

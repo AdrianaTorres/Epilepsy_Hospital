@@ -25,11 +25,11 @@ import guiHospital.GuiHospital;
 import security.Security;
 
 public class HospitalDoctorConnection implements Runnable {
-	Socket socket;
-	InputStream inputStream;
-	OutputStream outputStream;
-	PrintWriter pw;
-	BufferedReader bf;
+	public static Socket socket;
+	public static InputStream inputStream;
+	public static OutputStream outputStream;
+	public static PrintWriter pw;
+	public static BufferedReader bf;
 
 	private PrivateKey privateKey;
 	private PublicKey publicKey;
@@ -153,7 +153,7 @@ public class HospitalDoctorConnection implements Runnable {
 		}
 	}
 
-	private static void releaseResources(InputStream is, OutputStream os, PrintWriter pw, BufferedReader br,
+	public static void releaseResources(InputStream is, OutputStream os, PrintWriter pw, BufferedReader br,
 			Socket socket) {
 
 		try {
