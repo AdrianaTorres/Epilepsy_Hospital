@@ -41,6 +41,7 @@ public class HospitalDoctorConnection implements Runnable {
 
 	public HospitalDoctorConnection(Socket socket) throws Exception {
 		try {
+			
 			this.socket = socket;
 			pw = new PrintWriter(socket.getOutputStream(), true);
 			bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
