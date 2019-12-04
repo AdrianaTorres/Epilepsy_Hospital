@@ -27,6 +27,8 @@ import fileManager.FileManager;
 public class AdminLogin {
 	private JFrame f;
 	private JPanel contentPane;
+	public String user;
+	public String password;
 	public AdminLogin() {
 		f= new JFrame();
 		f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -176,5 +178,8 @@ public class AdminLogin {
 		panel_3.add(btnConfirm);
 		panel_3.add(button_2);
 		f.setVisible(true);
+		
+		user = text_1.getText();
+		password = text_2.getText();
 	}
 }

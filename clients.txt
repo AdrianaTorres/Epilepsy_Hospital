@@ -1,28 +1,7 @@
-
-test4 SYMPTOMS
-name
-surname
-34
-123
-m
-
-test3
-my name
-my surname
-67
-34
+lucia
+luci
+ruiz
+50
+20
 f
 
-test2
-profile
-we
-45
-67
-m
-
-test1
-my Name
-my Surname
-78
-67
-m
