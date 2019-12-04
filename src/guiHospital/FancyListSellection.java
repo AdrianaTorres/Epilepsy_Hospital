@@ -9,23 +9,25 @@ import javax.swing.JList;
 
 public class FancyListSellection extends DefaultListCellRenderer {
 	private HashMap theChosen = new HashMap();
+	private HashMap theChosen2 = new HashMap();
 
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
 			boolean cellHasFocus) {
 		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-		System.out.println(value);
 		String content=(String)value;
-		if (content.contains("1")) {
+		if (content.contains("CRITICAL")) {
 			theChosen.put(value, "chosen");
-			/*Allows setting up a priority system with codes, we can later mask*/
+		}
+		if(content.contains("SYMPTOMS")) {
+			theChosen2.put(value, "chosen2");
 		}
 
 		if (theChosen.containsKey(value)) {
 			setForeground(Color.red);
-		} else {
-			setForeground(Color.black);
+		} 
+		if(theChosen2.containsKey(value)) {
+			setForeground(Color.yellow);
 		}
-
 		return (this);
 	}
 }

@@ -18,6 +18,7 @@ import security.FileEncryptor;
 public class FileManager {
 	private static String userpasswdPath = System.getProperty("user.dir") + "\\whiteList.txt";
 	private static String doctorPath = System.getProperty("user.dir") + "\\DoctorWhiteList.txt";
+	private static String adminPath = System.getProperty("user.dir") + "\\rootMeUp.txt";
 	private static String doctorData = System.getProperty("user.dir") + "\\Doctors.txt";
 	private static String usersData = System.getProperty("user.dir") + "\\clients.txt";
 	private static String reportDir = System.getProperty("user.dir") + "\\reports";
@@ -100,7 +101,6 @@ public class FileManager {
 				}
 				System.out.println(temp);
 				if (counter % 2 == 1) {
-					temp = FileEncryptor.encryptString(temp);
 					passw.add(temp);
 				} else {
 					users.add(temp);
@@ -274,7 +274,6 @@ public class FileManager {
 					char gender = bf.readLine().toCharArray()[0];
 					User t = new User(name, surname, weight, age, gender, username);
 					users.add(t);
-					bf.readLine();
 				}
 			}
 			pw = new PrintWriter(new FileOutputStream(usersData), true);
@@ -436,6 +435,62 @@ public class FileManager {
 		} catch (Exception e) {
 			System.out.println("could not fetch the doctor's profile");
 			return goAndFetch;
+		}
+	}
+
+	public static boolean rootMeUp(String temp, String text) {
+		try {
+			bf = new BufferedReader(new InputStreamReader(new FileInputStream(adminPath)));
+			String read = "";
+			String root = "";
+			String psw = "";
+			int counter = 0;
+			while (read != null) {
+				read = bf.readLine();
+				if (read == null) {
+					break;
+				}
+				if (counter == 0) {
+					root = read;
+				} else {
+					psw = read;
+				}
+				counter++;
+			}
+			psw = FileEncryptor.decryptString(psw);			
+			if (psw.equals(temp) && root.equals(text)) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			System.out.println("where is the admin? I can't seem to find him");
+			return false;
+		}
+	}
+
+	public static boolean firstTimeLaunch() {
+		File admin = new File(adminPath);
+		if (admin.isFile()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	public static void createAdminFile(String username, String pasword) {
+		try {
+			File admin = new File(adminPath);			
+			pw = new PrintWriter(new FileOutputStream(adminPath),true);
+			if(admin.isFile()) {
+				pw.println(username);
+				pasword=FileEncryptor.encryptString(pasword);
+				pw.println(pasword);
+				pw.flush();
+				pw.close();
+			}
+		}catch(Exception e) {
+			System.out.println("could not create admin file! shutting down");
+			System.exit(0);
 		}
 	}
 }
