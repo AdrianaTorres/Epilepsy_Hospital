@@ -179,7 +179,7 @@ public class FileManager {
 		List<Double> eeg = new ArrayList<Double>();
 		String comment = "";
 
-		File manager = new File(report);
+		File manager = new File(reportDir+"//"+report);
 		BufferedReader data = null;
 		try {
 			System.out.println(manager.getAbsolutePath());

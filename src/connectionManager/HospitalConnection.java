@@ -48,6 +48,7 @@ public class HospitalConnection implements Runnable {
 	private PublicKey publicKey;
 	private PrivateKey userPC;
 
+	
 	User currentUser = new User(" ", " ", 0, 0, ' ', " ");
 	String currentUserName;
 	String currentPassword;
@@ -434,7 +435,7 @@ public class HospitalConnection implements Runnable {
 					System.out.println(temp);
 					instruction = temp;
 					counter = 0;
-					if (instruction.contains("COMMENTS")) {
+					if (instruction.equals("COMMENTS")) {
 						comments = temp;
 					}
 					if (instruction.contains("DONE")) {

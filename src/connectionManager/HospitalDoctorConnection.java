@@ -54,6 +54,7 @@ public class HospitalDoctorConnection implements Runnable {
 		}
 	}
 
+	
 	@Override
 	public void run() {
 		String request = "";
@@ -67,7 +68,6 @@ public class HospitalDoctorConnection implements Runnable {
 
 		switch (request) {
 		case "USER REQUESTING LOGIN":
-			System.out.println("login");
 			answerLogin();
 			boolean connected = true;
 			String request2 = "";
@@ -87,6 +87,7 @@ public class HospitalDoctorConnection implements Runnable {
 					break;
 				case "USER REQUESTING REPORT":
 					try {
+						System.out.println("imma send you something nice!");
 						answerSeeReport();
 					} catch (Exception e) {
 						System.out.println("Unable to show report.");
@@ -329,6 +330,7 @@ public class HospitalDoctorConnection implements Runnable {
 
 		try {
 			reportName = bf.readLine();
+			System.out.println(reportName);
 			Report rp=FileManager.getReport(reportName);
 			List<Double> time = rp.getEcgData()[0];
 			List<Double> data = rp.getEcgData()[1];
@@ -338,8 +340,8 @@ public class HospitalDoctorConnection implements Runnable {
 			pw.println(petition);
 			Iterator iterator_1 = time.iterator();
 			for (Iterator iterator = data.iterator(); iterator.hasNext();) {
-				pw.println(petition);
-				pw.println(petition);
+				pw.println(iterator_1.next());
+				pw.println(iterator.next());
 			}
 			petition = "SENDING EEG";
 			pw.println(petition);
@@ -347,12 +349,12 @@ public class HospitalDoctorConnection implements Runnable {
 			data = rp.getEegData()[1];
 			iterator_1 = time.iterator();
 			for (Iterator iterator = data.iterator(); iterator.hasNext();) {
-				pw.println(petition);
-				pw.println(petition);
+				pw.println(iterator_1.next());
+				pw.println(iterator.next());
 			}
 			petition = "SENDING COMMENTS";
 			pw.println(petition);
-			pw.println(petition);
+			pw.println(rp.getComments());
 			petition = "DONE";
 			pw.println(petition);
 		} catch (IOException e) {
