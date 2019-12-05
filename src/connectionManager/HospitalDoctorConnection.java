@@ -157,36 +157,43 @@ public class HospitalDoctorConnection implements Runnable {
 
 	public static void releaseResources(InputStream is, OutputStream os, PrintWriter pw, BufferedReader br,
 			Socket socket) {
-
+		System.out.println("BEGINNING SERVER2 SHUT DOWN");
+		System.out.println("...");
 		try {
+			System.out.println("attempting to close input stream...");
 			is.close();
 		} catch (Exception ex) {
-			System.out.println("could not close input Stream!");
+			System.out.println("could not close input Stream... Maybe it was never used?");
 		}
 
 		try {
+			System.out.println("attempting to close output stream...");
 			os.close();
 		} catch (Exception ex) {
-			System.out.println("could not close output Stream!");
+			System.out.println("could not close output Stream... Maybe it was never used?");
 		}
 
 		try {
+			System.out.println("attempting to close printwriter...");
 			pw.close();
 		} catch (Exception ex) {
-			System.out.println("could not close the printwriter!");
+			System.out.println("could not close the printwriter... Maybe it was never used?");
 		}
 
 		try {
+			System.out.println("attempting to close buffered reader...");
 			br.close();
 		} catch (Exception ex) {
-			System.out.println("could not close the buffered reader!");
+			System.out.println("could not close the buffered reader... Maybe it was never used?");
 		}
 
 		try {
+			System.out.println("attempting to close Doctor Socket...");
 			socket.close();
 		} catch (Exception ex) {
-			System.out.println("could not close the socket!");
+			System.out.println("The socket just commited Sepoku");
 		}
+		System.out.println("...\nSERVER2 SHUTDOWN COMPLETED");
 
 	}
 

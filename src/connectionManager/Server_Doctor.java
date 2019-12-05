@@ -22,12 +22,12 @@ public class Server_Doctor implements Runnable {
                 try {
                 	new Thread(new HospitalDoctorConnection(socket)).start();
                 }catch(Exception e) {
-                	System.out.println("Could not connect doctor");
+                	System.out.println("...\nDOCTOR SOCKET IS NOW OFFLINE\n...");
+                	break;
                 }
                 
             }
         } catch (IOException e) {
-			e.printStackTrace();
 		} finally {
             releaseResourcesServer(serverSocket_Doctor);
         }

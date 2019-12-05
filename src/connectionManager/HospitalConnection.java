@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SortingFocusTraversalPolicy;
 import javax.xml.bind.DatatypeConverter;
 
 import fileManager.FileManager;
@@ -151,37 +152,44 @@ public class HospitalConnection implements Runnable {
 
 	public static void releaseResources(InputStream is, OutputStream os, PrintWriter pw, BufferedReader br,
 			Socket socket) {
-
+		System.out.println("BEGINNING CLIENT SERVER SHUTDOWN");
+		System.out.println("...");
 		try {
+			System.out.println("attempting to close input stream...");
 			is.close();
 		} catch (Exception ex) {
-			System.out.println("could not close input Stream!");
+			System.out.println("Could not close the input stream... Maybe it was never used?");
 		}
 
 		try {
+			System.out.println("attempting to close output stream...");
 			os.close();
 		} catch (Exception ex) {
-			System.out.println("could not close output Stream!");
+			System.out.println("could not close output Stream... Maybe it was never used?");
 		}
 
 		try {
+			System.out.println("attempting to close printwriter...");
 			pw.close();
 		} catch (Exception ex) {
-			System.out.println("could not close the printwriter!");
+			System.out.println("could not close the printwriter... Maybe it was never used?");
 		}
 
 		try {
+			System.out.println("attempting to close buffered reader...");
 			br.close();
 		} catch (Exception ex) {
-			System.out.println("could not close the buffered reader!");
+			System.out.println("could not close the buffered reader... maybe it was never used?");
 		}
 
 		try {
+			System.out.println("attempting to close Client Socket...");
 			socket.close();
 		} catch (Exception ex) {
-			System.out.println("The socket just fuckin died, must have been the client");
+			System.out.println("The socket just commited Sepoku");
 		}
-
+		System.out.println("...");
+		System.out.println("CLIENT SERVER SHUTDOWN COMPLETED");
 	}
 
 	public void answerLogin() {

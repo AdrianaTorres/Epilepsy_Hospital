@@ -20,16 +20,17 @@ public class Server implements Runnable {
         	serverSocket = new ServerSocket(9000);
             while (true) {
                 //This executes when we have a client
-                Socket socket = serverSocket.accept();
                 try {
+                	Socket socket = serverSocket.accept();
                 	new Thread(new HospitalConnection(socket)).start();
                 }catch(Exception e) {
-                	System.out.println("Could not connect patient");
+                	System.out.println("...");
+                	System.out.println("CLIENT SOCKET IS NOW OFFLINE\n...");
+                	break;
                 }
                 
             }
         } catch (IOException e) {
-			e.printStackTrace();
 		} finally {
             releaseResourcesServer(serverSocket);
         }
