@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -46,10 +47,7 @@ public class GuiHospital extends JFrame implements Runnable{
 	private JPanel contentPane;
 	private JTextField tag;
 	private static List<String> users;
-	private String rP=System.getProperty("user.dir")+"\\resources";
-	/**
-	 * Create the frame.
-	 */
+
 	public GuiHospital(List<String>activePatients) {
 		this.users=activePatients;
 	}
@@ -290,8 +288,8 @@ public class GuiHospital extends JFrame implements Runnable{
 		panel_4.setBackground(Color.black);
 
 		try {
-			BufferedImage nominal;
-			nominal = ImageIO.read(new File(rP+"\\logo.jpg"));
+			URL nominal;
+			nominal=GuiHospital.class.getResource("/logo.jpg");
 			JLabel picLabel = new JLabel(new ImageIcon(nominal));
 			panel_4.add(picLabel,BorderLayout.NORTH);
 		}catch(Exception ex) {
