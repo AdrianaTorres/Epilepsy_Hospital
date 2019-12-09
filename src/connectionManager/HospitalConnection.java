@@ -63,7 +63,7 @@ public class HospitalConnection implements Runnable {
 			requestedMonitoring = false;
 
 		} catch (Exception e) {
-			System.out.println("could not connect to server!");
+			System.out.println("Could not connect to server!");
 			socket = null;
 			pw = null;
 			bf = null;
@@ -98,9 +98,9 @@ public class HospitalConnection implements Runnable {
 					request2 = Security.decryptMessage(request2, publicKey);
 				} catch (IOException e) {
 					this.answerFinishSession();
-					System.out.println("client disconnected");
+					System.out.println("Client disconnected");
 				}
-				System.out.println("while connected client asks for:"+ request2);
+				System.out.println("While connected client asks for:"+ request2);
 				switch (request2) {
 				case "USER REQUESTING MONITORING":
 					answerMonitoring();
@@ -130,18 +130,18 @@ public class HospitalConnection implements Runnable {
 				request3 = bf.readLine();
 				request3=Security.decryptMessage(request3, publicKey);
 			} catch (Exception e) {
-				System.out.println("miss me with that disconnection shit");
+				System.out.println("There was a problem creating the profile.");
 				break;
 			}
 			if (request3.equals("USER REQUESTING NEW USER PROFILE")) {
 				answerProfileData();
 				answerFinishSession();
 			} else
-				reply= Security.encryptMessage("Stop it, get some help, seriously", userPC);
+				reply= Security.encryptMessage("There was a problem creating the profile.", userPC);
 				pw.println(reply);
 
 		default:
-			reply="Congrats, you managed to get an impossible error, be proud";
+			reply="The server cannot answer the request.";
 			reply= Security.encryptMessage(reply, userPC);
 			pw.println(reply);
 			break;
@@ -155,38 +155,38 @@ public class HospitalConnection implements Runnable {
 		System.out.println("BEGINNING CLIENT SERVER SHUTDOWN");
 		System.out.println("...");
 		try {
-			System.out.println("attempting to close input stream...");
+			System.out.println("Attempting to close input stream...");
 			is.close();
 		} catch (Exception ex) {
-			System.out.println("Could not close the input stream... Maybe it was never used?");
+			System.out.println("Could not close the input stream.");
 		}
 
 		try {
-			System.out.println("attempting to close output stream...");
+			System.out.println("Attempting to close output stream...");
 			os.close();
 		} catch (Exception ex) {
-			System.out.println("could not close output Stream... Maybe it was never used?");
+			System.out.println("Could not close output Stream.");
 		}
 
 		try {
-			System.out.println("attempting to close printwriter...");
+			System.out.println("Attempting to close printwriter...");
 			pw.close();
 		} catch (Exception ex) {
-			System.out.println("could not close the printwriter... Maybe it was never used?");
+			System.out.println("Could not close the printwriter.");
 		}
 
 		try {
-			System.out.println("attempting to close buffered reader...");
+			System.out.println("Attempting to close buffered reader...");
 			br.close();
 		} catch (Exception ex) {
-			System.out.println("could not close the buffered reader... maybe it was never used?");
+			System.out.println("Could not close the buffered reader.");
 		}
 
 		try {
-			System.out.println("attempting to close Client Socket...");
+			System.out.println("Attempting to close Client Socket...");
 			socket.close();
 		} catch (Exception ex) {
-			System.out.println("The socket just commited Sepoku");
+			System.out.println("Could not close the client socket.");
 		}
 		System.out.println("...");
 		System.out.println("CLIENT SERVER SHUTDOWN COMPLETED");
@@ -275,7 +275,7 @@ public class HospitalConnection implements Runnable {
 				pw.println(response);
 			}
 		} catch (Exception e) {
-			System.out.println("could not recieve a proper response, we still flying though");
+			System.out.println("Could not recieve a proper response.");
 			String response = Security.encryptMessage("DENIED", userPC);
 			pw.println(response);
 		}
@@ -335,7 +335,7 @@ public class HospitalConnection implements Runnable {
 				rejected = true;
 			}
 			if (!rejected) {
-				System.out.println("REEEEEEEEEEEE");
+				System.out.println("Valid profile data.");
 				User user = new User(name, surname, weight, age, gender, currentUserName);
 				fileManager.FileManager.setUserConfig(user);
 				FileManager.setUserAndPassword(currentUserName, currentPassword);
@@ -451,7 +451,7 @@ public class HospitalConnection implements Runnable {
 					}
 				}
 			} catch (IOException e) {
-				System.out.println("error reading report ");
+				System.out.println("Error reading report ");
 				e.printStackTrace();
 			}
 		}
