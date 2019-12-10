@@ -340,7 +340,7 @@ public class HospitalConnection implements Runnable {
 				User user = new User(name, surname, weight, age, gender, currentUserName);
 				fileManager.FileManager.setUserConfig(user);
 				FileManager.setUserAndPassword(currentUserName, currentPassword);
-				String response = Security.encryptMessage("ACCEPTED", userPC);
+				String response = Security.encryptMessage("CONFIRM", userPC);
 				pw.println(response);
 				System.out.println("ACCEPTED");
 				System.out.println(user);

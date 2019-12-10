@@ -332,11 +332,11 @@ public class FileManager {
 		try {
 			password = FileEncryptor.encryptString(password);
 			bf = new BufferedReader(new InputStreamReader(new FileInputStream(doctorPath)));
-			pw = new PrintWriter(new FileOutputStream(doctorPath), true);
 			ArrayList<String> content = new ArrayList<String>();
 			String read = "";
 			while (read != null) {
 				read = bf.readLine();
+				System.out.println("I am reading the following: "+ read);
 				if (read == null) {
 					break;
 				}
@@ -344,6 +344,7 @@ public class FileManager {
 			}
 			content.add(username);
 			content.add(password);
+			pw = new PrintWriter(new FileOutputStream(doctorPath), true);
 			for (Iterator iterator = content.iterator(); iterator.hasNext();) {
 				String string = (String) iterator.next();
 				pw.println(string);
@@ -358,7 +359,7 @@ public class FileManager {
 	public static void setDoctorProfile(String username, String name, String surname) {
 		try {
 			bf = new BufferedReader(new InputStreamReader(new FileInputStream(doctorData)));
-			pw = new PrintWriter(new FileOutputStream(doctorData), true);
+			
 			ArrayList<String> content = new ArrayList<String>();
 			String read = "";
 			while (read != null) {
@@ -372,6 +373,7 @@ public class FileManager {
 			content.add(name);
 			content.add(surname);
 			content.add("");
+			pw = new PrintWriter(new FileOutputStream(doctorData), true);
 			for (Iterator iterator = content.iterator(); iterator.hasNext();) {
 				String string = (String) iterator.next();
 				pw.println(string);
