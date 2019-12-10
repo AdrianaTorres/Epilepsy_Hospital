@@ -88,7 +88,7 @@ public class HospitalDoctorConnection implements Runnable {
 					break;
 				case "USER REQUESTING REPORT":
 					try {
-						System.out.println("imma send you something nice!");
+						System.out.println("Sending report...");
 						answerSeeReport();
 					} catch (Exception e) {
 						System.out.println("Unable to show report.");
@@ -151,7 +151,7 @@ public class HospitalDoctorConnection implements Runnable {
 			pw.println(temp.getAge());
 			pw.println(temp.getGender());
 		}catch(Exception e) {
-			System.out.println("could not determine profile");
+			System.out.println("Could not determine profile");
 		}
 	}
 
@@ -160,38 +160,38 @@ public class HospitalDoctorConnection implements Runnable {
 		System.out.println("BEGINNING SERVER2 SHUT DOWN");
 		System.out.println("...");
 		try {
-			System.out.println("attempting to close input stream...");
+			System.out.println("Attempting to close input stream...");
 			is.close();
 		} catch (Exception ex) {
-			System.out.println("could not close input Stream... Maybe it was never used?");
+			System.out.println("Could not close input stream.");
 		}
 
 		try {
-			System.out.println("attempting to close output stream...");
+			System.out.println("Attempting to close output stream...");
 			os.close();
 		} catch (Exception ex) {
-			System.out.println("could not close output Stream... Maybe it was never used?");
+			System.out.println("Could not close output stream.");
 		}
 
 		try {
-			System.out.println("attempting to close printwriter...");
+			System.out.println("Attempting to close printwriter...");
 			pw.close();
 		} catch (Exception ex) {
-			System.out.println("could not close the printwriter... Maybe it was never used?");
+			System.out.println("Could not close the printwriter.");
 		}
 
 		try {
-			System.out.println("attempting to close buffered reader...");
+			System.out.println("Attempting to close buffered reader...");
 			br.close();
 		} catch (Exception ex) {
-			System.out.println("could not close the buffered reader... Maybe it was never used?");
+			System.out.println("Could not close the buffered reader.");
 		}
 
 		try {
-			System.out.println("attempting to close Doctor Socket...");
+			System.out.println("Attempting to close Doctor Socket...");
 			socket.close();
 		} catch (Exception ex) {
-			System.out.println("The socket just commited Sepoku");
+			System.out.println("Could not close the socket.");
 		}
 		System.out.println("...\nSERVER2 SHUTDOWN COMPLETED");
 
@@ -268,7 +268,7 @@ public class HospitalDoctorConnection implements Runnable {
 				pw.println(response);
 			}
 		} catch (Exception e) {
-			System.out.println("could not recieve a proper response, we still flying though");
+			System.out.println("Could not recieve a proper response.");
 			String response = "DENIED";
 			pw.println(response);
 		}
@@ -319,7 +319,7 @@ public class HospitalDoctorConnection implements Runnable {
 
 	public void answerReportsList() {
 		ArrayList<String> reports = new ArrayList<String>();
-		System.out.println("knock knock");
+		System.out.println("Sending reports list...");
 		File[] files = new File(System.getProperty("user.dir") + "\\reports").listFiles();
 		System.out.println(files.toString());
 		for (File file : files) {
@@ -342,7 +342,7 @@ public class HospitalDoctorConnection implements Runnable {
 			Report rp=FileManager.getReport(reportName);
 			List<Double> time = rp.getEcgData()[0];
 			List<Double> data = rp.getEcgData()[1];
-			System.out.println("sending report now!");
+			System.out.println("Sending report now!");
 			String petition;
 			petition = "SENDING ECG";
 			pw.println(petition);
@@ -366,7 +366,7 @@ public class HospitalDoctorConnection implements Runnable {
 			petition = "DONE";
 			pw.println(petition);
 		} catch (IOException e) {
-			System.out.println("could not send report from server to doctor...");
+			System.out.println("Could not send report from server to doctor.");
 			e.printStackTrace();
 		}
 	}

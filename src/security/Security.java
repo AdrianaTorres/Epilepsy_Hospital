@@ -25,7 +25,7 @@ public class Security {
 			keys.put("public", publicKey);
 			return keys;
 		} catch (Exception e) {
-			System.out.println("could not get keys!");
+			System.out.println("Could not get keys!");
 			return null;
 		}
 	}
@@ -36,7 +36,7 @@ public class Security {
 			cipher.init(Cipher.DECRYPT_MODE, publicKey);
 			return new String(cipher.doFinal(Base64.getDecoder().decode(encryptedText)));
 		}catch(Exception e) {
-			System.out.println("what the fuck is that even supposed to mean??");
+			System.out.println("Could not decrypt the message.");
 			return "";
 		}
 		
@@ -48,7 +48,7 @@ public class Security {
 			cipher.init(Cipher.ENCRYPT_MODE, privateKey);
 			return Base64.getEncoder().encodeToString(cipher.doFinal(plainText.getBytes()));
 		}catch(Exception e) {
-			System.out.println("I really don't know what to say here... Weird flex but ok I guess");
+			System.out.println("Could not encrypt the message.");
 			return "";
 		}
 		

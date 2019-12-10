@@ -51,7 +51,7 @@ public class AdminCreate {
 		panel_3.setBackground(Color.BLACK);
 		
 		Font ui = new Font("Segoe UI", Font.PLAIN,12);
-		JLabel lblWelcomeAdminPlease= new JLabel("Welcome Admin, please create a new user");
+		JLabel lblWelcomeAdminPlease= new JLabel("Welcome Admin, please create a new user.");
 		JLabel label_2= new JLabel("User Name");
 		JLabel label_3= new JLabel("Password");
 		

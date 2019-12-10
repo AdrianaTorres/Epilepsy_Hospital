@@ -28,9 +28,9 @@ public class FileManager {
 
 	FileManager() {
 		if (isConfigured()) {
-			System.out.println("succesfully loaded/ created config files");
+			System.out.println("Succesfully loaded/ created config files");
 		} else {
-			System.out.println("fatal error could not open necessary config files");
+			System.out.println("Fatal error. Could not open necessary config files");
 		}
 	}
 
@@ -80,7 +80,7 @@ public class FileManager {
 			}
 			return new List[] { userNames, passwords };
 		} catch (Exception e) {
-			System.out.println("could not read users or passwords!");
+			System.out.println("Could not read users or passwords!");
 			e.printStackTrace();
 			return null;
 		}
@@ -120,7 +120,7 @@ public class FileManager {
 			bf.close();
 			pw.close();
 		} catch (Exception e) {
-			System.out.println("could not add user or password");
+			System.out.println("Could not add user or password");
 			e.printStackTrace();
 		}
 	}
@@ -159,13 +159,13 @@ public class FileManager {
 			data.println("COMMENTS");
 			data.println(comments);
 		} catch (Exception e) {
-			System.out.println("could not create report file");
+			System.out.println("Could not create report file");
 			e.printStackTrace();
 		} finally {
 			try {
 				data.close();
 			} catch (Exception e) {
-				System.out.println("could not close report file");
+				System.out.println("Could not close report file");
 				e.printStackTrace();
 			}
 
@@ -213,12 +213,12 @@ public class FileManager {
 			try {
 				data.close();
 			} catch (Exception e) {
-				System.out.println("could not close reader");
+				System.out.println("Could not close reader");
 				e.printStackTrace();
 			}
 			return new Report((new List[] { time2, ecg }), (new List[] { time1, eeg }), comment);
 		} catch (Exception e) {
-			System.out.println("could not read report");
+			System.out.println("Could not read report");
 			e.printStackTrace();
 			return null;
 		}
@@ -249,7 +249,7 @@ public class FileManager {
 			}
 			return us;
 		} catch (Exception e) {
-			System.out.println("could not read user configuration!");
+			System.out.println("Could not read user configuration!");
 			e.printStackTrace();
 			return null;
 		}
@@ -292,7 +292,7 @@ public class FileManager {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("could not add the user!");
+			System.out.println("Could not add the user!");
 		}
 	}
 
@@ -319,12 +319,12 @@ public class FileManager {
 		try {
 			pw.close();
 		} catch (Exception e) {
-			System.out.println("could not close printwriter");
+			System.out.println("Could not close printwriter");
 		}
 		try {
 			bf.close();
 		} catch (Exception e) {
-			System.out.println("could not close buffered reader");
+			System.out.println("Could not close buffered reader");
 		}
 	}
 
@@ -379,7 +379,7 @@ public class FileManager {
 			pw.close();
 			bf.close();
 		} catch (Exception e) {
-			System.out.println("could not write down the given doctor's profile");
+			System.out.println("Could not write down the given doctor's profile");
 		}
 	}
 
@@ -405,7 +405,7 @@ public class FileManager {
 			}
 			return new List[] { usernames, passwords };
 		} catch (Exception e) {
-			System.out.println("could not read doctors!");
+			System.out.println("Could not read doctors!");
 			return new List[] { usernames, passwords };
 		}
 	}
@@ -433,7 +433,7 @@ public class FileManager {
 			}
 			return goAndFetch;
 		} catch (Exception e) {
-			System.out.println("could not fetch the doctor's profile");
+			System.out.println("Could not fetch the doctor's profile");
 			return goAndFetch;
 		}
 	}
@@ -464,7 +464,7 @@ public class FileManager {
 				return false;
 			}
 		} catch (Exception e) {
-			System.out.println("where is the admin? I can't seem to find him");
+			System.out.println("Incorrect credentials.");
 			return false;
 		}
 	}
@@ -489,7 +489,7 @@ public class FileManager {
 				pw.close();
 			}
 		}catch(Exception e) {
-			System.out.println("could not create admin file! shutting down");
+			System.out.println("Could not create admin file! shutting down");
 			System.exit(0);
 		}
 	}

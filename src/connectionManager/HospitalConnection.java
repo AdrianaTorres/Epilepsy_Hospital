@@ -335,6 +335,8 @@ public class HospitalConnection implements Runnable {
 				rejected = true;
 			}
 			if (!rejected) {
+
+				System.out.println("Valid profile data.");
 				User user = new User(name, surname, weight, age, gender, currentUserName);
 				fileManager.FileManager.setUserConfig(user);
 				FileManager.setUserAndPassword(currentUserName, currentPassword);
