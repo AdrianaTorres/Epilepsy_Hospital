@@ -363,6 +363,7 @@ public class HospitalConnection implements Runnable {
 		List<Double> time = new ArrayList<Double>();
 		boolean phase1 = false;
 		int counter = 0;
+		GuiHospital.updateClients(currentUserName, "SYMPTOMS");
 		while (true) {
 			try {
 				String read = bf.readLine();
@@ -416,7 +417,7 @@ public class HospitalConnection implements Runnable {
 		String instruction = "";
 		String comments = "";
 		int counter = 0;
-		GuiHospital.updateClients(currentUserName, "SYMPTOMS");
+		
 		while (true) {
 			try {
 				temp = bf.readLine();
@@ -445,7 +446,7 @@ public class HospitalConnection implements Runnable {
 					instruction = temp;
 					counter = 0;
 					if (instruction.equals("COMMENTS")) {
-						comments = temp;
+						comments = comments+temp;
 					}
 					if (instruction.contains("DONE")) {
 						break;
