@@ -445,8 +445,12 @@ public class HospitalConnection implements Runnable {
 					System.out.println(temp);
 					instruction = temp;
 					counter = 0;
-					if (instruction.equals("COMMENTS")) {
-						comments = comments+temp;
+					boolean theseAreComments=false;
+					if (instruction.contains("COMMENTS")) {
+						theseAreComments=true;
+					}
+					if(theseAreComments && !instruction.contains("COMMENTS")) {
+						comments= comments+temp;
 					}
 					if (instruction.contains("DONE")) {
 						break;
